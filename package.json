@@ -1,5 +1,5 @@
 {
-  "name": "@zodios/core",
+  "name": "@callym/zodios",
   "description": "Typescript API client with autocompletion and zod validations",
   "version": "10.9.6",
   "main": "lib/index.js",
@@ -25,10 +25,10 @@
     "name": "ecyrbe",
     "email": "ecyrbe@gmail.com"
   },
-  "homepage": "https://github.com/ecyrbe/zodios",
+  "homepage": "https://github.com/callym/zodios",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ecyrbe/zodios.git"
+    "url": "git+https://github.com/callym/zodios.git"
   },
   "license": "MIT",
   "keywords": [
