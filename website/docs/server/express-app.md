@@ -15,8 +15,12 @@ For more information on how to use express, check out the [Express documentation
 To upgrade an existing express application with typesafety, replace your `express()` calls to `zodiosApp(api)`
 
 ```ts
-function zodiosApp(api?: ZodiosEndpointDescriptions, options?: ZodiosAppOptions): ZodiosApp
+function zodiosApp(
+  api?: ZodiosEndpointDescriptions,
+  options?: ZodiosAppOptions,
+): ZodiosApp;
 ```
+
 ## `ctx.app`
 
 You can also create a context aware express application with `ctx.app`:
@@ -57,13 +61,15 @@ import z from "zod/v4";
 import { userApi } from "../../common/api";
 import { userMiddleware } from "./userMiddleware";
 
-const ctx = zodiosContext(z.object({
-  user: z.object({
-    id: z.number(),
-    name: z.string(),
-    isAdmin: z.boolean(),
+const ctx = zodiosContext(
+  z.object({
+    user: z.object({
+      id: z.number(),
+      name: z.string(),
+      isAdmin: z.boolean(),
+    }),
   }),
-}));
+);
 
 const app = ctx.app(userApi);
 // middleware that adds the user to the context
@@ -74,7 +80,7 @@ app.use(userMiddleware);
 app.get("/users/:id", (req, res) => {
   //  auto-complete user  fully typed
   //      ▼
-  if(req.user.isAdmin) {
+  if (req.user.isAdmin) {
     // res.json is typed thanks to zod
     return res.json({
       //   auto-complete req.params.id
@@ -84,13 +90,12 @@ app.get("/users/:id", (req, res) => {
     });
   }
   return res.status(403).end();
-})
+});
 
 app.listen(3000);
 ```
 
 ### Express Application
-
 
 ```ts title="/src/server/app.ts"
 import { zodiosApp } from "@zodios/express";
@@ -109,7 +114,7 @@ app.get("/users/:id", (req, res) => {
     id: req.params.id,
     name: "John Doe",
   });
-})
+});
 
 app.listen(3000);
 ```
@@ -141,8 +146,9 @@ const userApi = makeApi([
           message: z.string(),
           id: z.number(),
         }),
-      }, {
-        status: 'default', // default status code will be used if error is not 404
+      },
+      {
+        status: "default", // default status code will be used if error is not 404
         response: z.object({
           code: z.string(),
           message: z.string(),
@@ -157,7 +163,7 @@ app.get("/users/:id", (req, res) => {
   try {
     const id = +req.params.id;
     const user = service.findUser(id);
-    if(!user) {
+    if (!user) {
       // match error 404 schema with auto-completion
       res.status(404).json({
         code: "USER_NOT_FOUND",
@@ -168,14 +174,14 @@ app.get("/users/:id", (req, res) => {
       // match response schema with auto-completion
       res.json(user);
     }
-  } catch(err) {
+  } catch (err) {
     // match default error schema with auto-completion
     res.status(500).json({
       code: "INTERNAL_ERROR",
       message: "Internal error",
     });
   }
-})
+});
 
 app.listen(3000);
 ```

@@ -8,7 +8,7 @@ const plugin: ZodiosPlugin = {
     if (typeof config.data !== "object" || Array.isArray(config.data)) {
       throw new ZodiosError(
         "Zodios: multipart/form-data body must be an object",
-        config
+        config,
       );
     }
     const result = getFormDataStream(config.data as any);

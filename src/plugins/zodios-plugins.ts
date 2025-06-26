@@ -69,7 +69,7 @@ export class ZodiosPlugins {
     } else {
       if (plugin.key !== this.key) {
         throw new Error(
-          `Plugin with key '${plugin.key}' is not registered for endpoint '${this.key}'`
+          `Plugin with key '${plugin.key}' is not registered for endpoint '${this.key}'`,
         );
       }
       this.plugins[plugin.value] = undefined;
@@ -84,7 +84,7 @@ export class ZodiosPlugins {
    */
   async interceptRequest(
     api: ZodiosEndpointDefinitions,
-    config: ReadonlyDeep<AnyZodiosRequestOptions>
+    config: ReadonlyDeep<AnyZodiosRequestOptions>,
   ) {
     let pluginConfig = config;
     for (const plugin of this.plugins) {
@@ -105,7 +105,7 @@ export class ZodiosPlugins {
   async interceptResponse(
     api: ZodiosEndpointDefinitions,
     config: ReadonlyDeep<AnyZodiosRequestOptions>,
-    response: Promise<AxiosResponse>
+    response: Promise<AxiosResponse>,
   ) {
     let pluginResponse = response;
     for (let index = this.plugins.length - 1; index >= 0; index--) {
@@ -115,7 +115,7 @@ export class ZodiosPlugins {
           plugin?.response
             ? (res) => plugin.response!(api, config, res)
             : undefined,
-          plugin?.error ? (err) => plugin.error!(api, config, err) : undefined
+          plugin?.error ? (err) => plugin.error!(api, config, err) : undefined,
         );
       }
     }
@@ -129,7 +129,7 @@ export class ZodiosPlugins {
   count() {
     return this.plugins.reduce(
       (count, plugin) => (plugin ? count + 1 : count),
-      0
+      0,
     );
   }
 }

@@ -70,7 +70,7 @@ const {
   data: users,
   isLoading,
   isError,
-} = hooks.useSearchUsers({ name: 'John' });
+} = hooks.useSearchUsers({ name: "John" });
 ```
 
 :::note
@@ -109,7 +109,7 @@ useQuery(path: string, config?: ZodiosRequestOptions, queryOptions?: QueryOption
 **Example**:
 
 ```ts
-const { data: users, isLoading, isError } = hooks.useQuery('/users');
+const { data: users, isLoading, isError } = hooks.useQuery("/users");
 ```
 
 :::note
@@ -131,7 +131,7 @@ const {
   data: users,
   isLoading,
   isError,
-} = hooks.useImmutableQuery('/users/search', { name: 'John' });
+} = hooks.useImmutableQuery("/users/search", { name: "John" });
 ```
 
 :::note
@@ -224,7 +224,7 @@ useMutation(method: string, path: string, config: ZodiosRequestOptions, reactQue
 **Example**:
 
 ```ts
-const { mutate } = hooks.useMutation('post', '/users');
+const { mutate } = hooks.useMutation("post", "/users");
 ```
 
 :::note
@@ -252,7 +252,7 @@ const {
   isError,
   invalidate,
   key,
-} = hooks.useGet('/users/:id', { params: { id: 1 } });
+} = hooks.useGet("/users/:id", { params: { id: 1 } });
 ```
 
 ### `zodios.usePost`
@@ -264,7 +264,7 @@ usePost(path: string, config?: ZodiosRequestOptions, reactQueryOptions?: ReactQu
 **Example**:
 
 ```ts
-const { mutate } = hooks.usePost('/users');
+const { mutate } = hooks.usePost("/users");
 ```
 
 ### `zodios.usePut`
@@ -276,7 +276,7 @@ usePut(path: string, config?: ZodiosRequestOptions, reactQueryOptions?: ReactQue
 **Example**:
 
 ```ts
-const { mutate } = hooks.usePut('/users/:id', { params: { id: 1 } });
+const { mutate } = hooks.usePut("/users/:id", { params: { id: 1 } });
 ```
 
 ### `zodios.usePatch`
@@ -288,7 +288,7 @@ usePatch(path: string, config?: ZodiosRequestOptions, reactQueryOptions?: ReactQ
 **Example**:
 
 ```ts
-const { mutate } = hooks.usePatch('/users/:id', { params: { id: 1 } });
+const { mutate } = hooks.usePatch("/users/:id", { params: { id: 1 } });
 ```
 
 ### `zodios.useDelete`
@@ -300,7 +300,7 @@ useDelete(path: string, config?: ZodiosRequestOptions, reactQueryOptions?: React
 **Example**:
 
 ```ts
-const { mutate } = hooks.useDelete('/users/:id', { params: { id: 1 } });
+const { mutate } = hooks.useDelete("/users/:id", { params: { id: 1 } });
 ```
 
 ## Zodios key helpers
@@ -318,14 +318,14 @@ getKeyByPath(method: string, path: string, config?: ZodiosRequestOptions): Query
 To get a key for a path endpoint with parameters:
 
 ```ts
-const key = zodios.getKeyByPath('get', '/users/:id', { params: { id: 1 } });
+const key = zodios.getKeyByPath("get", "/users/:id", { params: { id: 1 } });
 const user = queryClient.getQueryData<User>(key);
 ```
 
 To get a key to invalidate a path endpoint for all possible parameters:
 
 ```ts
-const key = zodios.getKeyByPath('get', '/users/:id');
+const key = zodios.getKeyByPath("get", "/users/:id");
 queryClient.invalidateQueries(key);
 ```
 
@@ -340,14 +340,14 @@ getKeyByAlias(alias: string, config?: ZodiosRequestOptions): QueryKey;
 To get a key for an alias endpoint with parameters:
 
 ```ts
-const key = zodios.getKeyByAlias('getUser', { params: { id: 1 } });
+const key = zodios.getKeyByAlias("getUser", { params: { id: 1 } });
 const user = queryClient.getQueryData<User>(key);
 ```
 
 To get a key to invalidate an alias endpoint for all possible parameters:
 
 ```ts
-const key = zodios.getKeyByAlias('getUser');
+const key = zodios.getKeyByAlias("getUser");
 queryClient.invalidateQueries(key);
 ```
 
@@ -402,8 +402,8 @@ const Users = () => {
 ```
 
 ```tsx title="root.tsx"
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { Users } from './users';
+import { QueryClient, QueryClientProvider } from "react-query";
+import { Users } from "./users";
 
 const queryClient = new QueryClient();
 

@@ -14,6 +14,7 @@ We only show npm and yarn as they are the most popular.
 ```bash npm2yarn
 npm install @zodios/core axios zod
 ```
+
 ### With React
 
 if you want to use the react hooks, you need to install the following packages:
@@ -29,6 +30,7 @@ if you want to use the solid hooks, you need to install the following packages:
 ```bash npm2yarn
 npm install @tanstack/solid-query @zodios/core @zodios/solid axios solid-js zod
 ```
+
 ### Install type definitions
 
 install those even in javascript projects.

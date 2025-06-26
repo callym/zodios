@@ -48,7 +48,6 @@ It's an axios compatible API client and an optional expressJS compatible API ser
 - `@tanstack/query` wrappers for react and solid (vue, svelte, etc, soon)
 - all expressJS features available (middlewares, etc.)
 
-
 **Table of contents:**
 
 - [What is it ?](#what-is-it-)
@@ -133,6 +132,7 @@ It should output
 ```js
 { id: 7, name: 'Kurtis Weissnat' }
 ```
+
 You can also use aliases :
 
 ```typescript
@@ -141,32 +141,34 @@ You can also use aliases :
 const user = await apiClient.getUser({ params: { id: 7 } });
 console.log(user);
 ```
+
 ## API definition format
 
 ```typescript
 type ZodiosEndpointDescriptions = Array<{
-  method: 'get'|'post'|'put'|'patch'|'delete';
+  method: "get" | "post" | "put" | "patch" | "delete";
   path: string; // example: /posts/:postId/comments/:commentId
   alias?: string; // example: getPostComments
   immutable?: boolean; // flag a post request as immutable to allow it to be cached with react-query
   description?: string;
-  requestFormat?: 'json'|'form-data'|'form-url'|'binary'|'text'; // default to json if not set
+  requestFormat?: "json" | "form-data" | "form-url" | "binary" | "text"; // default to json if not set
   parameters?: Array<{
     name: string;
     description?: string;
-    type: 'Path'|'Query'|'Body'|'Header';
+    type: "Path" | "Query" | "Body" | "Header";
     schema: ZodSchema; // you can use zod `transform` to transform the value of the parameter before sending it to the server
   }>;
   response: ZodSchema; // you can use zod `transform` to transform the value of the response before returning it
   status?: number; // default to 200, you can use this to override the sucess status code of the response (only usefull for openapi and express)
   responseDescription?: string; // optional response description of the endpoint
   errors?: Array<{
-    status: number | 'default';
+    status: number | "default";
     description?: string;
     schema: ZodSchema; // transformations are not supported on error schemas
   }>;
 }>;
 ```
+
 # Full documentation
 
 Check out the [full documentation](https://www.zodios.org) or following shortcuts.
@@ -188,15 +190,15 @@ Check out the [full documentation](https://www.zodios.org) or following shortcut
 
 # Roadmap for v11
 
-for Zod` / `Io-Ts` :
+for Zod`/`Io-Ts` :
 
-  - By using the TypeProvider pattern we can now make zodios validation agnostic.
+- By using the TypeProvider pattern we can now make zodios validation agnostic.
 
-  - Implement at least ZodTypeProvider and IoTsTypeProvider since they both support `input` and `output` type inferrence
+- Implement at least ZodTypeProvider and IoTsTypeProvider since they both support `input` and `output` type inferrence
 
-  - openapi generation will only be compatible with zod though
+- openapi generation will only be compatible with zod though
 
-  - Not a breaking change so no codemod needed
+- Not a breaking change so no codemod needed
 
 - [x] MonoRepo:
 
@@ -234,13 +236,13 @@ for Zod` / `Io-Ts` :
 
 - [ ] React/Solid:
 
-   - make ZodiosHooks independant of Zodios client instance (axios, fetch)
+  - make ZodiosHooks independant of Zodios client instance (axios, fetch)
 
-   - not a breaking change, so no codemod needed
+  - not a breaking change, so no codemod needed
 
 - [x] Client Request Config
 
-  - uniform Query/Mutation with body sent on the config and not as a standalone object. This would allow to not do `client.deleteUser(undefined, { params: { id: 1 } })` but simply  `client.deleteUser({ params: { id: 1 } })`
+  - uniform Query/Mutation with body sent on the config and not as a standalone object. This would allow to not do `client.deleteUser(undefined, { params: { id: 1 } })` but simply `client.deleteUser({ params: { id: 1 } })`
 
   - breaking change, so a codemod would be needed, but might be difficult to implement
 
@@ -253,6 +255,7 @@ for Zod` / `Io-Ts` :
   - new feature, so no breaking change (no codemod needed)
 
 You have other ideas ? [Let me know !](https://github.com/ecyrbe/zodios/discussions)
+
 # Dependencies
 
 Zodios even when working in pure Javascript is better suited to be working with Typescript Language Server to handle autocompletion.
@@ -263,5 +266,6 @@ Earlier versions should work, but do not have TS tail recusion optimisation that
 Also note that Zodios do not embed any dependency. It's your Job to install the peer dependencies you need.
 
 Internally Zodios uses these libraries on all platforms :
+
 - zod
 - axios

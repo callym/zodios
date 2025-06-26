@@ -12,7 +12,7 @@ import {
 
 function isDefinedError(
   error: unknown,
-  findEndpointErrors: (error: AxiosError) => ZodiosEndpointError[] | undefined
+  findEndpointErrors: (error: AxiosError) => ZodiosEndpointError[] | undefined,
 ): boolean {
   if (
     error instanceof AxiosError ||
@@ -23,7 +23,7 @@ function isDefinedError(
       const endpointErrors = findEndpointErrors(err);
       if (endpointErrors) {
         return endpointErrors.some(
-          (desc) => desc.schema.safeParse(err.response!.data).success
+          (desc) => desc.schema.safeParse(err.response!.data).success,
         );
       }
     }
@@ -42,21 +42,21 @@ function isDefinedError(
 export function isErrorFromPath<
   Api extends ZodiosEndpointDefinitions,
   M extends Method,
-  Path extends string
+  Path extends string,
 >(
   api: Api,
   method: M,
   path: Path extends ZodiosPathsByMethod<Api, M>
     ? Path
     : ZodiosPathsByMethod<Api, M>,
-  error: unknown
+  error: unknown,
 ): error is ZodiosMatchingErrorsByPath<
   Api,
   M,
   Path extends ZodiosPathsByMethod<Api, M> ? Path : never
 > {
   return isDefinedError(error, (err) =>
-    findEndpointErrorsByPath(api, method, path, err)
+    findEndpointErrorsByPath(api, method, path, err),
   );
 }
 
@@ -69,13 +69,13 @@ export function isErrorFromPath<
  */
 export function isErrorFromAlias<
   Api extends ZodiosEndpointDefinitions,
-  Alias extends string
+  Alias extends string,
 >(
   api: Api,
   alias: Alias extends Aliases<Api> ? Alias : Aliases<Api>,
-  error: unknown
+  error: unknown,
 ): error is ZodiosMatchingErrorsByAlias<Api, Alias> {
   return isDefinedError(error, (err) =>
-    findEndpointErrorsByAlias(api, alias, err)
+    findEndpointErrorsByAlias(api, alias, err),
   );
 }

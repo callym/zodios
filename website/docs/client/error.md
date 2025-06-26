@@ -12,7 +12,12 @@ Indeed, many things can go wrong when making a request to an API. The server can
 `isErrorFromPath` is a type guard that allows you to check if an error is an expected error by its path. Allowing to have typesafe error handling.
 
 ```ts
-function isErrorFromPath(api: ZodiosEndpointDefinitions, method: string, path: string, error: unknown): error is AxiosError<ErrorsFromDefinition>
+function isErrorFromPath(
+  api: ZodiosEndpointDefinitions,
+  method: string,
+  path: string,
+  error: unknown,
+): error is AxiosError<ErrorsFromDefinition>;
 ```
 
 ## `isErrorFromAlias`
@@ -20,7 +25,11 @@ function isErrorFromPath(api: ZodiosEndpointDefinitions, method: string, path: s
 `isErrorFromAlias` is a type guard that allows you to check if an error is an expected error by its alias. Allowing to have typesafe error handling.
 
 ```ts
-function isErrorFromAlias(api: ZodiosEndpointDefinitions, alias: string, error: unknown): error is AxiosError<ErrorsFromDefinition>
+function isErrorFromAlias(
+  api: ZodiosEndpointDefinitions,
+  alias: string,
+  error: unknown,
+): error is AxiosError<ErrorsFromDefinition>;
 ```
 
 ## Example
@@ -46,11 +55,11 @@ const api = makeApi([
         }),
       },
       {
-        status: 'default',
+        status: "default",
         schema: z.object({
           message: z.string(),
         }),
-      }
+      },
     ],
   },
 ]);
@@ -64,9 +73,9 @@ try {
   // - isErrorFromPath(zodios.api, "get", "/users/:id", error)
   // - isErrorFromAlias(api, "getUser", error)
   // - isErrorFromAlias(zodios.api, "getUser", error)
-  if(isErrorFromPath(api, "get", "/users/:id", error)){
+  if (isErrorFromPath(api, "get", "/users/:id", error)) {
     // error type is now narrowed to an axios error with a response from the ones defined in the api
-    if(error.response.status === 404) {
+    if (error.response.status === 404) {
       // error.response.data is guaranteed to be of type { message: string, specificTo404: string }
     } else {
       // error.response.data is guaranteed to be of type { message: string }

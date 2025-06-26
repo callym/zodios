@@ -14,7 +14,7 @@ import {
  */
 export function omit<T, K extends keyof T>(
   obj: T | undefined,
-  keys: K[]
+  keys: K[],
 ): Omit<T, K> {
   const ret = { ...obj } as T;
   for (const key of keys) {
@@ -31,7 +31,7 @@ export function omit<T, K extends keyof T>(
  */
 export function pick<T, K extends keyof T>(
   obj: T | undefined,
-  keys: K[]
+  keys: K[],
 ): Pick<T, K> {
   const ret = {} as Pick<T, K>;
   if (obj) {
@@ -54,13 +54,13 @@ export function capitalize<T extends string>(str: T): Capitalize<T> {
 const paramsRegExp = /:([a-zA-Z_][a-zA-Z0-9_]*)/g;
 
 export function replacePathParams(
-  config: ReadonlyDeep<AnyZodiosRequestOptions>
+  config: ReadonlyDeep<AnyZodiosRequestOptions>,
 ) {
   let result: string = config.url;
   const params = config.params;
   if (params) {
     result = result.replace(paramsRegExp, (match, key) =>
-      key in params ? `${params[key]}` : match
+      key in params ? `${params[key]}` : match,
     );
   }
   return result;
@@ -69,24 +69,24 @@ export function replacePathParams(
 export function findEndpoint(
   api: ZodiosEndpointDefinitions,
   method: string,
-  path: string
+  path: string,
 ) {
   return api.find((e) => e.method === method && e.path === path);
 }
 
 export function findEndpointByAlias(
   api: ZodiosEndpointDefinitions,
-  alias: string
+  alias: string,
 ) {
   return api.find((e) => e.alias === alias);
 }
 
 export function findEndpointErrors(
   endpoint: ZodiosEndpointDefinition,
-  err: AxiosError
+  err: AxiosError,
 ) {
   const matchingErrors = endpoint.errors?.filter(
-    (error) => error.status === err.response!.status
+    (error) => error.status === err.response!.status,
   );
   if (matchingErrors && matchingErrors.length > 0) return matchingErrors;
   return endpoint.errors?.filter((error) => error.status === "default");
@@ -96,7 +96,7 @@ export function findEndpointErrorsByPath(
   api: ZodiosEndpointDefinitions,
   method: string,
   path: string,
-  err: AxiosError
+  err: AxiosError,
 ) {
   const endpoint = findEndpoint(api, method, path);
   return endpoint &&
@@ -111,7 +111,7 @@ export function findEndpointErrorsByPath(
 export function findEndpointErrorsByAlias(
   api: ZodiosEndpointDefinitions,
   alias: string,
-  err: AxiosError
+  err: AxiosError,
 ) {
   const endpoint = findEndpointByAlias(api, alias);
 
@@ -126,6 +126,6 @@ export function findEndpointErrorsByAlias(
 
 export function pathMatchesUrl(path: string, url: string) {
   return new RegExp(`^${path.replace(paramsRegExp, () => "([^/]*)")}$`).test(
-    url
+    url,
   );
 }

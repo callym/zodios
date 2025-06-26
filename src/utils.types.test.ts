@@ -18,7 +18,7 @@ describe("utils.types", () => {
         { a: number; c: boolean },
         { c: boolean },
         { d: string },
-        { e: number }
+        { e: number },
       ];
       const test1: Assert<
         FilterArrayByValue<Input, { a: number }>,
@@ -50,7 +50,7 @@ describe("utils.types", () => {
         { a: number; c: boolean },
         { c: boolean },
         { d: string },
-        { e: number }
+        { e: number },
       ];
       const test1: Assert<
         FilterArrayByKey<Input, "a">,

@@ -5,7 +5,7 @@ sidebar_position: 2
 # API definition helpers
 
 Usually, you'll want to define your API definition in a separate file and import it in your server and client code.
-For this use case, Zodios provides some helpers to make your life easier and still keep your API definition correctly inferred without needing to use Typescript `as const`.  
+For this use case, Zodios provides some helpers to make your life easier and still keep your API definition correctly inferred without needing to use Typescript `as const`.
 
 :::caution
 These helpers, are mandatory to be used when declaring your definitions outside of `Zodios` constructor to allow your API definitions to be correctly inferred in both pure Javascript and Typescript.
@@ -20,6 +20,7 @@ function makeApi(api: ZodiosEndpointDescriptions): ZodiosEndpointDescriptions;
 ```
 
 **Example**
+
 ```ts
 import { makeApi } from "@zodios/core";
 
@@ -46,10 +47,13 @@ const api = makeApi([
 `makeEndpoint` is a helper to narrow a single endpoint definition and make some runtime checks.
 
 ```ts
-function makeEndpoint(endpoint: ZodiosEndpointDescription): ZodiosEndpointDescription;
+function makeEndpoint(
+  endpoint: ZodiosEndpointDescription,
+): ZodiosEndpointDescription;
 ```
 
 **Example**
+
 ```ts
 import { makeEndpoint } from "@zodios/core";
 
@@ -66,7 +70,7 @@ It can then be combined with `makeApi` to compose a full api description.
 
 ```ts
 import { makeApi } from "@zodios/core";
-import { getUser,getUsers } from "./endpoints";
+import { getUser, getUsers } from "./endpoints";
 
 const api = makeApi([getUser, getUsers]);
 ```
@@ -76,10 +80,13 @@ const api = makeApi([getUser, getUsers]);
 `makeParameters` is a helper to narrow your parameter definitions.
 
 ```ts
-function makeParameters(params: ZodiosEndpointParameters): ZodiosEndpointParameters;
+function makeParameters(
+  params: ZodiosEndpointParameters,
+): ZodiosEndpointParameters;
 ```
 
 **Example**
+
 ```ts
 import { makeParameters } from "@zodios/core";
 
@@ -100,6 +107,7 @@ const params = makeParameters([
 ```
 
 It can then be combined with `makeApi` to compose a full api description.
+
 ```ts
 const api = makeApi([
   {
@@ -112,7 +120,9 @@ const api = makeApi([
   },
 ]);
 ```
+
 is equivalent to
+
 ```ts
 import { makeApi } from "@zodios/core";
 
@@ -150,6 +160,7 @@ function makeErrors(errors: ZodiosEndpointErrors): ZodiosEndpointErrors;
 ```
 
 **Example**
+
 ```ts
 import { makeErrors } from "@zodios/core";
 
@@ -179,6 +190,7 @@ const errors = makeErrors([
 ```
 
 It can then be combined with `makeApi` to compose a full api description.
+
 ```ts
 const api = makeApi([
   {
@@ -191,7 +203,9 @@ const api = makeApi([
   },
 ]);
 ```
+
 is equivalent to
+
 ```ts
 import { makeApi } from "@zodios/core";
 
@@ -255,6 +269,7 @@ ParametersBuilder is a helper to build parameter definitions with better type au
 | build         | none                                        | ZodiosEndpointParameters | Build the parameters               |
 
 **Example**
+
 ```ts
 import { parametersBuilder } from "@zodios/core";
 
@@ -265,7 +280,9 @@ const params = parametersBuilder()
   })
   .build();
 ```
+
 is equivalent to
+
 ```ts
 import { parametersBuilder } from "@zodios/core";
 
@@ -276,6 +293,7 @@ const params = parametersBuilder()
 ```
 
 is equivalent to
+
 ```ts
 import { parametersBuilder } from "@zodios/core";
 
@@ -288,6 +306,7 @@ const params = parametersBuilder()
 ```
 
 is equivalent to
+
 ```ts
 import { parametersBuilder } from "@zodios/core";
 
@@ -296,7 +315,9 @@ const params = parametersBuilder()
   .addParameter("offset", "Query", z.number().positive())
   .build();
 ```
+
 is equivalent to
+
 ```ts
 import { makeParameters } from "@zodios/core";
 
@@ -315,6 +336,7 @@ const params = makeParameters([
 ```
 
 It can then be combined with `makeApi` to compose a full api description.
+
 ```ts
 const api = makeApi([
   {
@@ -329,6 +351,7 @@ const api = makeApi([
 ```
 
 is equivalent to
+
 ```ts
 import { makeApi } from "@zodios/core";
 
@@ -373,6 +396,7 @@ ApiBuilder is a helper to build API definitions with better type autocompletion.
 | build       | none                      | ZodiosEndpointDescriptions | Build the API              |
 
 **Example**
+
 ```ts
 import { apiBuilder } from "@zodios/core";
 
@@ -398,17 +422,20 @@ const api = apiBuilder({
 `mergeApis` is a helper to merge multiple API definitions in a router friendly way.
 
 ```ts
-function mergeApis(apis: Record<string,ZodiosEndpointDescriptions>): ZodiosEndpointDescriptions;
+function mergeApis(
+  apis: Record<string, ZodiosEndpointDescriptions>,
+): ZodiosEndpointDescriptions;
 ```
 
 **Example**
+
 ```ts
 import { mergeApis } from "@zodios/core";
 import { usersApi } from "./users";
 import { postsApi } from "./posts";
 
 const api = mergeApis({
-  '/users': usersApi,
-  '/posts': postsApi,
+  "/users": usersApi,
+  "/posts": postsApi,
 });
 ```

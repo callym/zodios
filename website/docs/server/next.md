@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Next integration
 
-Next integration is easy, with end-to-end typesafe developer experience, where you can combine the power of all the Zodios packages into one single codebase.  
+Next integration is easy, with end-to-end typesafe developer experience, where you can combine the power of all the Zodios packages into one single codebase.
 
 :::info
 For more information about the Next framework, check out the [Next documentation](https://nextjs.org/docs)
@@ -33,9 +33,10 @@ To integrate zodios to NextJS, you need to create a `slug` file named `[...zodio
 │   │   ├── context.ts # export your main app context here
 └── [..]
 ```
-:::tip It's recommended to use the example below to bootstrap your NextJS application. 
-  It has correct setup for webpack configuration with `@zodios/react`
-  [Example project](https://github.com/ecyrbe/zodios-express/tree/main/examples/next)
+
+:::tip It's recommended to use the example below to bootstrap your NextJS application.
+It has correct setup for webpack configuration with `@zodios/react`
+[Example project](https://github.com/ecyrbe/zodios-express/tree/main/examples/next)
 :::
 
 ## Bundling

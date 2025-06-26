@@ -28,12 +28,12 @@ new Zodios(api: ZodiosEnpointDescriptions, options?: ZodiosOptions)
 You can predefine some schemas to reuse them in your API definition.
 
 ```ts
-import { Zodios, makeErrors } from '@zodios/core';
-import z from 'zod/v4';
+import { Zodios, makeErrors } from "@zodios/core";
+import z from "zod/v4";
 
 const errors = makeErrors([
   {
-    status: 'default',
+    status: "default",
     schema: z.object({
       error: z.object({
         code: z.number(),
@@ -54,28 +54,28 @@ const user = z.object({
 Then you can define your API endpoints directly in the `Zodios` constructor.
 
 ```ts
-const apiClient = new Zodios('/api', [
+const apiClient = new Zodios("/api", [
   {
-    method: 'get',
-    path: '/users',
-    alias: 'getUsers',
+    method: "get",
+    path: "/users",
+    alias: "getUsers",
     response: z.array(user),
   },
   {
-    method: 'get',
-    path: '/users/:id',
-    alias: 'getUser',
+    method: "get",
+    path: "/users/:id",
+    alias: "getUser",
     response: user,
     errors,
   },
   {
-    method: 'post',
-    path: '/users',
-    alias: 'createUser',
+    method: "post",
+    path: "/users",
+    alias: "createUser",
     parameters: [
       {
-        name: 'user',
-        type: 'Body',
+        name: "user",
+        type: "Body",
         schema: user.omit({ id: true }),
       },
     ],
@@ -94,9 +94,9 @@ const users = await apiClient.getUsers();
 const user = await apiClient.getUser({ params: { id: 1 } });
 // create user
 const newUser = await apiClient.createUser({
-  name: 'John',
+  name: "John",
   age: 20,
-  email: 'jodn@doe.com',
+  email: "jodn@doe.com",
 });
 ```
 
@@ -147,7 +147,7 @@ use(alias: string, plugin: ZodiosPlugin): PluginId;
 **Example**:
 
 ```ts
-import { pluginFetch } from '@zodios/plugins';
+import { pluginFetch } from "@zodios/plugins";
 
 apiClient.use(
   pluginFetch({
@@ -221,7 +221,7 @@ See examples below.
 
 ```ts
 // identical to api.post("/users", { name: "John" })
-const user = await api.createUser({ name: 'John' });
+const user = await api.createUser({ name: "John" });
 ```
 
 Is equivalent to the following HTTP request:
@@ -254,9 +254,9 @@ See examples below.
 
 ```ts
 const user = await api.request({
-  method: 'post',
-  url: '/users',
-  data: { name: 'John' },
+  method: "post",
+  url: "/users",
+  data: { name: "John" },
 });
 ```
 
@@ -276,19 +276,19 @@ See examples below.
 **example**:
 
 ```ts
-const users = await api.get('/users');
+const users = await api.get("/users");
 ```
 
 with path parameters
 
 ```ts
-const user = await api.get('/users/:id', { params: { id: 1 } }); // GET /users/1
+const user = await api.get("/users/:id", { params: { id: 1 } }); // GET /users/1
 ```
 
 with query parameters
 
 ```ts
-const users = await api.get('/users', { queries: { limit: 10 } }); // GET /users?limit=10
+const users = await api.get("/users", { queries: { limit: 10 } }); // GET /users?limit=10
 ```
 
 ### `zodios.post`
@@ -307,7 +307,7 @@ See examples below.
 **Example**:
 
 ```ts
-const user = await api.post('/users', { name: 'John' });
+const user = await api.post("/users", { name: "John" });
 ```
 
 Is equivalent to the following HTTP request:
@@ -339,8 +339,8 @@ See examples below.
 
 ```ts
 const user = await api.put(
-  '/users/:id',
-  { id: 1, name: 'John' },
+  "/users/:id",
+  { id: 1, name: "John" },
   { params: { id: 1 } },
 );
 ```
@@ -375,8 +375,8 @@ See examples below.
 
 ```ts
 const user = await api.patch(
-  '/users/:id',
-  { name: 'John' },
+  "/users/:id",
+  { name: "John" },
   { params: { id: 1 } },
 );
 ```
@@ -409,7 +409,7 @@ See examples below.
 **Example**:
 
 ```ts
-const user = await api.delete('/users/:id', undefined, { params: { id: 1 } });
+const user = await api.delete("/users/:id", undefined, { params: { id: 1 } });
 ```
 
 will send the following HTTP request:
@@ -458,12 +458,12 @@ Accept: application/json
 Since Zodios is using zod, you can use zod transformations.
 
 ```typescript
-const apiClient = new Zodios('https://jsonplaceholder.typicode.com', [
+const apiClient = new Zodios("https://jsonplaceholder.typicode.com", [
   {
-    method: 'get',
-    path: '/users/:id',
-    alias: 'getUser',
-    description: 'Get a user',
+    method: "get",
+    path: "/users/:id",
+    alias: "getUser",
+    description: "Get a user",
     response: z
       .object({
         id: z.number(),
@@ -471,8 +471,8 @@ const apiClient = new Zodios('https://jsonplaceholder.typicode.com', [
       })
       .transform(({ name, ...rest }) => ({
         ...rest,
-        firstname: name.split(' ')[0],
-        lastname: name.split(' ')[1],
+        firstname: name.split(" ")[0],
+        lastname: name.split(" ")[1],
       })),
   },
 ]);
@@ -498,17 +498,17 @@ And polyfill FormData with `globalThis.FormData = require("form-data");` before 
 :::
 
 ```typescript
-const apiClient = new Zodios('https://mywebsite.com', [
+const apiClient = new Zodios("https://mywebsite.com", [
   {
-    method: 'post',
-    path: '/upload',
-    alias: 'upload',
-    description: 'Upload a file',
-    requestFormat: 'form-data',
+    method: "post",
+    path: "/upload",
+    alias: "upload",
+    description: "Upload a file",
+    requestFormat: "form-data",
     parameters: [
       {
-        name: 'body',
-        type: 'Body',
+        name: "body",
+        type: "Body",
         schema: z.object({
           file: z.instanceof(File),
         }),
@@ -520,25 +520,25 @@ const apiClient = new Zodios('https://mywebsite.com', [
   },
 ]);
 const id = await apiClient.upload({
-  file: document.querySelector('#file').files[0],
+  file: document.querySelector("#file").files[0],
 });
 ```
 
 But you can also use your own multipart/form-data library, for example with `form-data` library on node.
 
 ```typescript
-import FormData from 'form-data';
+import FormData from "form-data";
 
-const apiClient = new Zodios('https://mywebsite.com', [
+const apiClient = new Zodios("https://mywebsite.com", [
   {
-    method: 'post',
-    path: '/upload',
-    alias: 'upload',
-    description: 'Upload a file',
+    method: "post",
+    path: "/upload",
+    alias: "upload",
+    description: "Upload a file",
     parameters: [
       {
-        name: 'body',
-        type: 'Body',
+        name: "body",
+        type: "Body",
         schema: z.instanceof(FormData),
       },
     ],
@@ -548,7 +548,7 @@ const apiClient = new Zodios('https://mywebsite.com', [
   },
 ]);
 const form = new FormData();
-form.append('file', document.querySelector('#file').files[0]);
+form.append("file", document.querySelector("#file").files[0]);
 const id = await apiClient.upload(form, { headers: form.getHeaders() });
 ```
 
@@ -557,17 +557,17 @@ const id = await apiClient.upload(form, { headers: form.getHeaders() });
 Zodios supports application/x-www-form-urlencoded requests with integrated `requestFormat`. Zodios is using URLSearchParams internally on both browser and node. (If you need IE support, see next example)
 
 ```typescript
-const apiClient = new Zodios('https://mywebsite.com', [
+const apiClient = new Zodios("https://mywebsite.com", [
   {
-    method: 'post',
-    path: '/login',
-    alias: 'login',
-    description: 'Submit a form',
-    requestFormat: 'form-url',
+    method: "post",
+    path: "/login",
+    alias: "login",
+    description: "Submit a form",
+    requestFormat: "form-url",
     parameters: [
       {
-        name: 'body',
-        type: 'Body',
+        name: "body",
+        type: "Body",
         schema: z.object({
           userName: z.string(),
           password: z.string(),
@@ -579,25 +579,25 @@ const apiClient = new Zodios('https://mywebsite.com', [
     }),
   },
 ]);
-const id = await apiClient.login({ userName: 'user', password: 'password' });
+const id = await apiClient.login({ userName: "user", password: "password" });
 ```
 
 But you can also use custom code to support for application/x-www-form-urlencoded requests.
 For example with `qs` library on IE :
 
 ```typescript
-import qs from 'qs';
+import qs from "qs";
 
-const apiClient = new Zodios('https://mywebsite.com', [
+const apiClient = new Zodios("https://mywebsite.com", [
   {
-    method: 'post',
-    path: '/login',
-    alias: 'login',
-    description: 'Submit a form',
+    method: "post",
+    path: "/login",
+    alias: "login",
+    description: "Submit a form",
     parameters: [
       {
-        name: 'body',
-        type: 'Body',
+        name: "body",
+        type: "Body",
         schema: z
           .object({
             userName: z.string(),
@@ -612,10 +612,10 @@ const apiClient = new Zodios('https://mywebsite.com', [
   },
 ]);
 const id = await apiClient.login(
-  { userName: 'user', password: 'password' },
+  { userName: "user", password: "password" },
   {
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      "Content-Type": "application/x-www-form-urlencoded",
     },
   },
 );
@@ -626,12 +626,12 @@ const id = await apiClient.login(
 Zodios has a helper to generate basic CRUD API. It will generate all the api definitions for you :
 
 ```typescript
-import { Zodios, makeCrudApi } from '@zodios/core';
+import { Zodios, makeCrudApi } from "@zodios/core";
 
 const apiClient = new Zodios(
   BASE_URL,
   makeCrudApi(
-    'user',
+    "user",
     z.object({
       id: z.number(),
       name: z.string(),
@@ -645,69 +645,69 @@ Is the same as :
 ```typescript
 const apiClient = new Zodios(BASE_URL, [
   {
-    method: 'get',
-    path: '/users',
-    alias: 'getUsers',
-    description: 'Get all users',
+    method: "get",
+    path: "/users",
+    alias: "getUsers",
+    description: "Get all users",
     response: z.array(userSchema),
   },
   {
-    method: 'get',
-    path: '/users/:id',
-    alias: 'getUser',
-    description: 'Get a user',
+    method: "get",
+    path: "/users/:id",
+    alias: "getUser",
+    description: "Get a user",
     response: userSchema,
   },
   {
-    method: 'post',
-    path: '/users',
-    alias: 'createUser',
-    description: 'Create a user',
+    method: "post",
+    path: "/users",
+    alias: "createUser",
+    description: "Create a user",
     parameters: [
       {
-        name: 'body',
-        type: 'Body',
-        description: 'The object to create',
+        name: "body",
+        type: "Body",
+        description: "The object to create",
         schema: userSchema.partial(),
       },
     ],
     response: userSchema,
   },
   {
-    method: 'put',
-    path: '/users/:id',
-    alias: 'updateUser',
-    description: 'Update a user',
+    method: "put",
+    path: "/users/:id",
+    alias: "updateUser",
+    description: "Update a user",
     parameters: [
       {
-        name: 'body',
-        type: 'Body',
-        description: 'The object to update',
+        name: "body",
+        type: "Body",
+        description: "The object to update",
         schema: userSchema,
       },
     ],
     response: userSchema,
   },
   {
-    method: 'patch',
-    path: '/users/:id',
-    alias: 'patchUser',
-    description: 'Patch a user',
+    method: "patch",
+    path: "/users/:id",
+    alias: "patchUser",
+    description: "Patch a user",
     parameters: [
       {
-        name: 'body',
-        type: 'Body',
-        description: 'The object to patch',
+        name: "body",
+        type: "Body",
+        description: "The object to patch",
         schema: userSchema.partial(),
       },
     ],
     response: userSchema,
   },
   {
-    method: 'delete',
-    path: '/users/:id',
-    alias: 'deleteUser',
-    description: 'Delete a user',
+    method: "delete",
+    path: "/users/:id",
+    alias: "deleteUser",
+    description: "Delete a user",
     response: userSchema,
   },
 ]);

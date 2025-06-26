@@ -7,7 +7,7 @@ const plugin: ZodiosPlugin = {
     if (typeof config.data !== "object" || Array.isArray(config.data)) {
       throw new ZodiosError(
         "Zodios: application/x-www-form-urlencoded body must be an object",
-        config
+        config,
       );
     }
 

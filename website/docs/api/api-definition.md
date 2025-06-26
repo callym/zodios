@@ -43,7 +43,6 @@ Indeed, they are automatically deduced from the path and added to the request pa
 Only declare path parameters in the `parameters` array if you want to add a description or a schema to validate them
 :::
 
-
 ### Errors
 
 The errors of an endpoint are an array of error descriptions. Each error description is an object with the following properties:

@@ -15,7 +15,10 @@ For more information on how to use express Router, check out the [Express docume
 To upgrade an existing express router with typesafety, replace your `express.Router()` calls to `zodiosRouter(api)`.
 
 ```ts
-function zodiosRouter(api?: ZodiosEndpointDescriptions, options?: ZodiosRouterOptions): ZodiosRouter
+function zodiosRouter(
+  api?: ZodiosEndpointDescriptions,
+  options?: ZodiosRouterOptions,
+): ZodiosRouter;
 ```
 
 ## `ctx.router`
@@ -52,23 +55,23 @@ type RouterValidationErrorHandler = (
 
 ## Examples
 
-
 ### Express Router from context
 
 ```ts
-
 import { zodiosContext } from "@zodios/express";
 import z from "zod/v4";
 import { userApi } from "../../common/api";
 import { userMiddleware } from "./userMiddleware";
 
-const ctx = zodiosContext(z.object({
-  user: z.object({
-    id: z.number(),
-    name: z.string(),
-    isAdmin: z.boolean(),
+const ctx = zodiosContext(
+  z.object({
+    user: z.object({
+      id: z.number(),
+      name: z.string(),
+      isAdmin: z.boolean(),
+    }),
   }),
-}));
+);
 
 const router = ctx.router();
 
@@ -95,19 +98,21 @@ or context aware
 ```ts
 import { zodiosContext } from "@zodios/express";
 
-const ctx = zodiosContext(z.object({
-  user: z.object({
-    id: z.number(),
-    name: z.string(),
-    isAdmin: z.boolean(),
+const ctx = zodiosContext(
+  z.object({
+    user: z.object({
+      id: z.number(),
+      name: z.string(),
+      isAdmin: z.boolean(),
+    }),
   }),
-}));
+);
 
 const app = ctx.app();
 const userRouter = ctx.router(userApi);
 const adminRouter = ctx.router(adminApi);
 
-app.use(userRouter,adminRouter);
+app.use(userRouter, adminRouter);
 
 app.listen(3000);
 ```

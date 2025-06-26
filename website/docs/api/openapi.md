@@ -4,7 +4,6 @@ sidebar_position: 3
 
 # OpenAPI
 
-
 Zodios api definition format while simple can contain sufficient information to generate an OpenAPI documentation.
 
 ## `openApiBuilder`
@@ -12,7 +11,7 @@ Zodios api definition format while simple can contain sufficient information to 
 `openApiBuilder` is a builder that can be used to generate an OpenAPI documentation from a Zodios api definition.
 
 ```ts
-function openApiBuilder(info: OpenAPIV3.InfoObject): OpenApiBuilder
+function openApiBuilder(info: OpenAPIV3.InfoObject): OpenApiBuilder;
 ```
 
 ### Methods of the builder
@@ -26,7 +25,6 @@ function openApiBuilder(info: OpenAPIV3.InfoObject): OpenApiBuilder
 | `setCustomTagsFn(tagsFromPathFn: (path: string) => string[])`                                             | override the default tagsFromPathFn        |
 | `build() => OpenAPIV3.Document`                                                                           | build the openapi document                 |
 
-
 ### Security scheme
 
 The `securityScheme` allows you to specify an OpenAPI security scheme object. Zodios has 3 helper functions to generate the security scheme object.
@@ -37,9 +35,9 @@ The `securityScheme` allows you to specify an OpenAPI security scheme object. Zo
 import { basicAuthScheme } from "@zodios/openapi";
 
 const doc = openApiBuilder(info)
-            .addSecurityScheme('auth',basicAuthScheme())
-            .addProtectedApi('auth', api)
-            .build();
+  .addSecurityScheme("auth", basicAuthScheme())
+  .addProtectedApi("auth", api)
+  .build();
 ```
 
 #### Bearer auth
@@ -48,29 +46,31 @@ const doc = openApiBuilder(info)
 import { bearerAuthScheme } from "@zodios/openapi";
 
 const doc = openApiBuilder(info)
-            .addSecurityScheme('bearer',bearerAuthScheme())
-            .addProtectedApi('bearer', api)
-            .build();
+  .addSecurityScheme("bearer", bearerAuthScheme())
+  .addProtectedApi("bearer", api)
+  .build();
 ```
 
 #### OAuth2
 
 ```ts
-
 import { oauth2Scheme } from "@zodios/openapi";
 
 const doc = openApiBuilder(info)
-            .addSecurityScheme('oauth2',oauth2Scheme({
-              implicit: {
-                authorizationUrl: "https://example.com/oauth2/authorize",
-                scopes: {
-                  "read:users": "read users",
-                  "write:users": "write users",
-                },
-              },
-            }))
-            .addProtectedApi('oauth2', api)
-            .build();
+  .addSecurityScheme(
+    "oauth2",
+    oauth2Scheme({
+      implicit: {
+        authorizationUrl: "https://example.com/oauth2/authorize",
+        scopes: {
+          "read:users": "read users",
+          "write:users": "write users",
+        },
+      },
+    }),
+  )
+  .addProtectedApi("oauth2", api)
+  .build();
 ```
 
 ### custom tags
@@ -92,8 +92,8 @@ const doc = openApiBuilder(info)
               }[path])
             .build();
 ```
-## `toOpenApi` - deprecated
 
+## `toOpenApi` - deprecated
 
 To generate an OpenAPI documentation from your api definition, you can use the `toOpenApi` method of `@zodios/openapi` package.
 
@@ -101,11 +101,11 @@ To generate an OpenAPI documentation from your api definition, you can use the `
 function toOpenApi(
   api: ZodiosApiDefinition,
   options?: {
-    info?: OpenAPIV3.InfoObject
+    info?: OpenAPIV3.InfoObject;
     servers?: OpenAPIV3.ServerObject[];
     securityScheme?: OpenAPIV3.SecuritySchemeObject;
     tagsFromPathFn?: (path: string) => string[];
-  }
+  },
 ): OpenAPIV3.Document;
 ```
 
@@ -120,14 +120,14 @@ import { serve, setup } from "swagger-ui-express";
 import { zodiosApp } from "@zodios/express";
 import { openApiBuilder } from "@zodios/openapi";
 import { userApi, adminApi } from "./api";
-import { userRouter } from './userRouter';
-import { adminRouter } from './adminRouter';
+import { userRouter } from "./userRouter";
+import { adminRouter } from "./adminRouter";
 
 const app = zodiosApp();
 
 // expose user api endpoints
-app.use('/api/v1', userRouter);
-app.use('/api/v1', adminRouter);
+app.use("/api/v1", userRouter);
+app.use("/api/v1", adminRouter);
 
 // expose openapi documentation
 const document = openApiBuilder({

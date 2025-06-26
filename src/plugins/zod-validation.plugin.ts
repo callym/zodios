@@ -31,7 +31,7 @@ export function zodValidationPlugin({
           const endpoint = findEndpoint(api, config.method, config.url);
           if (!endpoint) {
             throw new Error(
-              `No endpoint found for ${config.method} ${config.url}`
+              `No endpoint found for ${config.method} ${config.url}`,
             );
           }
           const { parameters } = endpoint;
@@ -73,7 +73,7 @@ export function zodValidationPlugin({
                   `Zodios: Invalid ${type} parameter '${name}'`,
                   config,
                   value,
-                  parsed.error
+                  parsed.error,
                 );
               }
               if (transformRequest) {
@@ -90,17 +90,17 @@ export function zodValidationPlugin({
           /* istanbul ignore next */
           if (!endpoint) {
             throw new Error(
-              `No endpoint found for ${config.method} ${config.url}`
+              `No endpoint found for ${config.method} ${config.url}`,
             );
           }
           if (
             response.headers?.["content-type"]?.includes("application/json") ||
             response.headers?.["content-type"]?.includes(
-              "application/vnd.api+json"
+              "application/vnd.api+json",
             )
           ) {
             const parsed = await endpoint.response.safeParseAsync(
-              response.data
+              response.data,
             );
             if (!parsed.success) {
               throw new ZodiosError(
@@ -111,11 +111,11 @@ export function zodValidationPlugin({
                 }\ncause:\n${parsed.error.message}\nreceived:\n${JSON.stringify(
                   response.data,
                   null,
-                  2
+                  2,
                 )}`,
                 config,
                 response.data,
-                parsed.error
+                parsed.error,
               );
             }
             if (shouldResponse(transform)) {

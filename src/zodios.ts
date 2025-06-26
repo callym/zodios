@@ -76,7 +76,7 @@ export class ZodiosClass<Api extends ZodiosEndpointDefinitions> {
   constructor(
     arg1?: Api | string,
     arg2?: Api | ZodiosOptions,
-    arg3?: ZodiosOptions
+    arg3?: ZodiosOptions,
   ) {
     let options: ZodiosOptions;
     if (!arg1) {
@@ -185,7 +185,7 @@ export class ZodiosClass<Api extends ZodiosEndpointDefinitions> {
   use<M extends Method, Path extends ZodiosPathsByMethod<Api, M>>(
     method: M,
     path: Path,
-    plugin: ZodiosPlugin
+    plugin: ZodiosPlugin,
   ): PluginId;
   use(...args: unknown[]) {
     if (typeof args[0] === "object") {
@@ -195,7 +195,7 @@ export class ZodiosClass<Api extends ZodiosEndpointDefinitions> {
       const plugins = this.findAliasEndpointPlugins(args[0]);
       if (!plugins)
         throw new Error(
-          `Zodios: no alias '${args[0]}' found to register plugin`
+          `Zodios: no alias '${args[0]}' found to register plugin`,
         );
       return plugins.use(args[1] as ZodiosPlugin);
     } else if (
@@ -206,7 +206,7 @@ export class ZodiosClass<Api extends ZodiosEndpointDefinitions> {
       const plugins = this.findEnpointPlugins(args[0] as Method, args[1]);
       if (!plugins)
         throw new Error(
-          `Zodios: no endpoint '${args[0]} ${args[1]}' found to register plugin`
+          `Zodios: no endpoint '${args[0]} ${args[1]}' found to register plugin`,
         );
       return plugins.use(args[2] as ZodiosPlugin);
     }
@@ -259,7 +259,7 @@ export class ZodiosClass<Api extends ZodiosEndpointDefinitions> {
   async request<M extends Method, Path extends string>(
     config: Path extends ZodiosPathsByMethod<Api, M>
       ? ReadonlyDeep<ZodiosRequestOptions<Api, M, Path>>
-      : ReadonlyDeep<ZodiosRequestOptions<Api, M, ZodiosPathsByMethod<Api, M>>>
+      : ReadonlyDeep<ZodiosRequestOptions<Api, M, ZodiosPathsByMethod<Api, M>>>,
   ): Promise<
     ZodiosResponseByPath<
       Api,
@@ -294,7 +294,7 @@ export class ZodiosClass<Api extends ZodiosEndpointDefinitions> {
    */
   async get<
     Path extends ZodiosPathsByMethod<Api, "get">,
-    TConfig extends ZodiosRequestOptionsByPath<Api, "get", Path>
+    TConfig extends ZodiosRequestOptionsByPath<Api, "get", Path>,
   >(
     path: Path,
     ...[config]: RequiredKeys<TConfig> extends never
@@ -317,7 +317,7 @@ export class ZodiosClass<Api extends ZodiosEndpointDefinitions> {
    */
   async post<
     Path extends ZodiosPathsByMethod<Api, "post">,
-    TConfig extends ZodiosRequestOptionsByPath<Api, "post", Path>
+    TConfig extends ZodiosRequestOptionsByPath<Api, "post", Path>,
   >(
     path: Path,
     data: ReadonlyDeep<UndefinedIfNever<ZodiosBodyByPath<Api, "post", Path>>>,
@@ -342,7 +342,7 @@ export class ZodiosClass<Api extends ZodiosEndpointDefinitions> {
    */
   async put<
     Path extends ZodiosPathsByMethod<Api, "put">,
-    TConfig extends ZodiosRequestOptionsByPath<Api, "put", Path>
+    TConfig extends ZodiosRequestOptionsByPath<Api, "put", Path>,
   >(
     path: Path,
     data: ReadonlyDeep<UndefinedIfNever<ZodiosBodyByPath<Api, "put", Path>>>,
@@ -367,7 +367,7 @@ export class ZodiosClass<Api extends ZodiosEndpointDefinitions> {
    */
   async patch<
     Path extends ZodiosPathsByMethod<Api, "patch">,
-    TConfig extends ZodiosRequestOptionsByPath<Api, "patch", Path>
+    TConfig extends ZodiosRequestOptionsByPath<Api, "patch", Path>,
   >(
     path: Path,
     data: ReadonlyDeep<UndefinedIfNever<ZodiosBodyByPath<Api, "patch", Path>>>,
@@ -391,7 +391,7 @@ export class ZodiosClass<Api extends ZodiosEndpointDefinitions> {
    */
   async delete<
     Path extends ZodiosPathsByMethod<Api, "delete">,
-    TConfig extends ZodiosRequestOptionsByPath<Api, "delete", Path>
+    TConfig extends ZodiosRequestOptionsByPath<Api, "delete", Path>,
   >(
     path: Path,
     data: ReadonlyDeep<UndefinedIfNever<ZodiosBodyByPath<Api, "delete", Path>>>,
@@ -414,12 +414,12 @@ export type ZodiosInstance<Api extends ZodiosEndpointDefinitions> =
 export type ZodiosConstructor = {
   new <Api extends ZodiosEndpointDefinitions>(
     api: Narrow<Api>,
-    options?: ZodiosOptions
+    options?: ZodiosOptions,
   ): ZodiosInstance<Api>;
   new <Api extends ZodiosEndpointDefinitions>(
     baseUrl: string,
     api: Narrow<Api>,
-    options?: ZodiosOptions
+    options?: ZodiosOptions,
   ): ZodiosInstance<Api>;
 };
 

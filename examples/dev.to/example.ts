@@ -17,7 +17,7 @@ export const devTo = new Zodios("https://dev.to/api", [
 devTo.use(
   pluginApiKey({
     getApiKey: async () => "<your dev.to api key>",
-  })
+  }),
 );
 
 const result = devTo.get("/articles/:id", {
