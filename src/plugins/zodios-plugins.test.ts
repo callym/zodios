@@ -44,15 +44,15 @@ describe("ZodiosPlugins", () => {
   it("should throw if plugin is not registered", () => {
     const plugins = new ZodiosPlugins("any", "any");
     const id = { key: "test-any", value: 5 };
-    expect(() => plugins.eject(id)).toThrowError(
-      `Plugin with key 'test-any' is not registered for endpoint 'any-any'`
+    expect(() => plugins.eject(id)).toThrow(
+      `Plugin with key 'test-any' is not registered for endpoint 'any-any'`,
     );
   });
 
   it("should throw if named plugin is not registered", () => {
     const plugins = new ZodiosPlugins("any", "any");
-    expect(() => plugins.eject("test")).toThrowError(
-      `Plugin with name 'test' not found`
+    expect(() => plugins.eject("test")).toThrow(
+      `Plugin with name 'test' not found`,
     );
   });
 
@@ -78,14 +78,14 @@ describe("ZodiosPlugins", () => {
       [],
       // @ts-ignore
       {},
-      Promise.resolve({ data: "test1:" })
+      Promise.resolve({ data: "test1:" }),
     );
     expect(response1.data).toBe("test1:21");
     const response2 = await plugins.interceptResponse(
       [],
       // @ts-ignore
       {},
-      Promise.resolve({ data: "test2:" })
+      Promise.resolve({ data: "test2:" }),
     );
     expect(response2.data).toBe("test2:21");
   });
@@ -102,7 +102,7 @@ describe("ZodiosPlugins", () => {
       [],
       // @ts-ignore
       { method: "any", url: "any" },
-      Promise.reject(new Error("test"))
+      Promise.reject(new Error("test")),
     );
     expect(response).toEqual({ test: true });
   });

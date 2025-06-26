@@ -4,21 +4,22 @@ sidebar_position: 5
 
 # Solid hooks
 
-Zodios comes with a Query and Mutation hook helper.  
+Zodios comes with a Query and Mutation hook helper.
 It's a thin wrapper around Solid-Query but with zodios auto completion and automatic key management.
 No need to remember your keys anymore.
-  
+
 Zodios query hook also returns an invalidation helper to allow you to reset Solid query cache easily.
 
 ## Zodios Hooks instance
 
-When creating an instance or zodios hooks, you need to provide a name that will be used as `Solid-query` key prefix and your instance of Zodios Api Client.  
+When creating an instance or zodios hooks, you need to provide a name that will be used as `Solid-query` key prefix and your instance of Zodios Api Client.
 
 ```ts
 new ZodiosHooks(name: string, client: Zodios)
 ```
 
 **Example**
+
 ```ts
 const apiClient = new Zodios(baseUrl, [...]);
 const apiHooks = new ZodiosHooks("myAPI", apiClient);
@@ -38,6 +39,7 @@ You will usually want to use aliases to call your endpoints. You can define them
 #### query alias:
 
 Query alias hooks will return a `QueryResult` object from `solid-query` with:
+
 - the response data and all solid-query result properties
 - the generated `key`
 - the `invalidate` helper.
@@ -47,44 +49,50 @@ function create[Alias](config?: ZodiosRequestOptions, queryOptions: CreateQueryO
 ```
 
 **example**:
+
 ```ts
 // identical to hooks.createQuery("/users")
-const state =  hooks.createGetUsers();
+const state = hooks.createGetUsers();
 ```
 
 #### immutable query alias:
+
 ```ts
 function create[Alias](body: Body, config?: ZodiosRequestOptions, queryOptions: CreateQueryOptions): CreateQueryResult<Response>;
 ```
 
 **example**:
+
 ```ts
 // identical to hooks.createImmutableQuery("/users/search")
-const state =  hooks.createSearchUsers({ name: "John" });
+const state = hooks.createSearchUsers({ name: 'John' });
 ```
 
 :::note
 Immutable query aliases are only available for `post` endpoints.
 you also need to set the `immutable` option to `true` in your API definition endpoint if you want alias to use `createImmutableQuery` hook.
 :::
-#### mutation alias 
+
+#### mutation alias
 
 Alias for `post`, `put`, `patch`, `delete` endpoints:
+
 ```ts
 function create[Alias](config?: ZodiosRequestOptions, mutationOptions?: CreateMutationOptions): MutationResult<Response>;
 ```
 
 **example**:
+
 ```ts
 // identical to createPost("/users") or createMutation("post","/users")
 const state = hooks.useCreateUser();
-
 ```
 
 ### `zodios.createQuery`
 
 Generic request method that allows to do queries (same as useGet).
 Query hooks will return a `QueryResult` object from `solid-query` with:
+
 - the response data and all solid-query result properties
 - the generated `key`
 - the `invalidate` helper.
@@ -94,6 +102,7 @@ createQuery(path: string, config?: ZodiosRequestOptions, queryOptions?: CreateQu
 ```
 
 **Example**:
+
 ```ts
 const state = hooks.createQuery('/users');
 ```
@@ -111,14 +120,14 @@ createImmutableQuery(path: string, body: Body ,config?: ZodiosRequestOptions, qu
 ```
 
 **Example**:
+
 ```ts
-const state = hooks.createImmutableQuery('/users/search', { name: "John" });
+const state = hooks.createImmutableQuery('/users/search', { name: 'John' });
 ```
 
 :::note
 check [solid-query documentation](https://tanstack.com/query/v4/docs/adapters/solid-query) for more informations on `QueryResult` and `QueryOptions`.
 :::
-
 
 ### `zodios.createInfiniteQuery`
 
@@ -131,6 +140,7 @@ useInfiniteQuery(path: string, config?: ZodiosRequestOptions, infiniteQueryOptio
 Compared to native solid-query infinite query, you also need to provide a function named `getPageParamList` to tell zodios which parameters will be used to paginate. Indeed, zodios needs to know it to be able to generate the correct query key automatically for you.
 
 **Example**:
+
 ```ts
   const state = apiHooks.createInfiniteQuery(
     "/users",
@@ -166,6 +176,7 @@ useImmutableInfiniteQuery(path: string, body: Body ,config?: ZodiosRequestOption
 Compared to native solid-query infinite query, you also need to provide a function named `getPageParamList` to tell zodios which parameters will be used to paginate. Indeed, zodios needs to know it to be able to generate the correct query key automatically for you.
 
 **Example**:
+
 ```ts
   const state = apiHooks.createImmutableInfiniteQuery(
     "/users/search",
@@ -202,8 +213,9 @@ createMutation(method: string, path: string, config: ZodiosRequestOptions, query
 ```
 
 **Example**:
+
 ```ts
-const state = hooks.createMutation('post','/users');
+const state = hooks.createMutation('post', '/users');
 ```
 
 :::note
@@ -213,6 +225,7 @@ check [solid-query documentation](https://tanstack.com/query/v4/docs/adapters/so
 ### `zodios.createGet`
 
 Query hooks will return a `QueryResult` object from `solid-query` with:
+
 - the response data and all solid-query result properties
 - the generated `key`
 - the `invalidate` helper.
@@ -222,11 +235,18 @@ createGet(path: string, config?: ZodiosRequestOptions, queryOptions?: CreateQuer
 ```
 
 **Example**:
+
 ```ts
-const state = hooks.createGet("/users/:id", { params: { id: 1 } });
+const state = hooks.createGet('/users/:id', { params: { id: 1 } });
 // reactive example
 const [id, setId] = createSignal(1);
-const state = hooks.createGet("/users/:id", { params: { get id() { return id()} } });
+const state = hooks.createGet('/users/:id', {
+  params: {
+    get id() {
+      return id();
+    },
+  },
+});
 ```
 
 ### `zodios.createPost`
@@ -236,8 +256,9 @@ createPost(path: string, config?: ZodiosRequestOptions, queryOptions?: CreateMut
 ```
 
 **Example**:
+
 ```ts
-const state = hooks.createPost("/users");
+const state = hooks.createPost('/users');
 ```
 
 ### `zodios.createPut`
@@ -247,11 +268,18 @@ createPut(path: string, config?: ZodiosRequestOptions, queryOptions?: CreateMuta
 ```
 
 **Example**:
+
 ```ts
-const state = hooks.createPut("/users/:id", { params: { id: 1 } });
+const state = hooks.createPut('/users/:id', { params: { id: 1 } });
 // reactive example
 const [id, setId] = createSignal(1);
-const state = hooks.createPut("/users/:id", { params: { get id() { return id()} } });
+const state = hooks.createPut('/users/:id', {
+  params: {
+    get id() {
+      return id();
+    },
+  },
+});
 ```
 
 ### `zodios.createPatch`
@@ -261,11 +289,18 @@ createPatch(path: string, config?: ZodiosRequestOptions, queryOptions?: CreateMu
 ```
 
 **Example**:
+
 ```ts
-const state = hooks.createPatch("/users/:id", {params: {id: 1}});
+const state = hooks.createPatch('/users/:id', { params: { id: 1 } });
 // reactive example
 const [id, setId] = createSignal(1);
-const state = hooks.createPatch("/users/:id", { params: { get id() { return id()} } });
+const state = hooks.createPatch('/users/:id', {
+  params: {
+    get id() {
+      return id();
+    },
+  },
+});
 ```
 
 ### `zodios.createDelete`
@@ -275,11 +310,18 @@ createDelete(path: string, config?: ZodiosRequestOptions, queryOptions?: CreateM
 ```
 
 **Example**:
+
 ```ts
-const state = hooks.createDelete("/users/:id", { params: {id: 1 }});
+const state = hooks.createDelete('/users/:id', { params: { id: 1 } });
 // reactive example
 const [id, setId] = createSignal(1);
-const state = hooks.createDelete("/users/:id", { params: { get id() { return id()} } });
+const state = hooks.createDelete('/users/:id', {
+  params: {
+    get id() {
+      return id();
+    },
+  },
+});
 ```
 
 ## Zodios key helpers
@@ -295,12 +337,14 @@ getKeyByPath(method: string, path: string, config?: ZodiosRequestOptions): Query
 **Examples**:
 
 To get a key for a path endpoint with parameters:
+
 ```ts
 const key = zodios.getKeyByPath('get', '/users/:id', { params: { id: 1 } });
 const user = queryClient.getQueryData<User>(key);
 ```
 
 To get a key to invalidate a path endpoint for all possible parameters:
+
 ```ts
 const key = zodios.getKeyByPath('get', '/users/:id');
 queryClient.invalidateQueries(key);
@@ -315,23 +359,27 @@ getKeyByAlias(alias: string, config?: ZodiosRequestOptions): QueryKey;
 **Examples**:
 
 To get a key for an alias endpoint with parameters:
+
 ```ts
 const key = zodios.getKeyByAlias('getUser', { params: { id: 1 } });
 const user = queryClient.getQueryData<User>(key);
 ```
+
 To get a key to invalidate an alias endpoint for all possible parameters:
+
 ```ts
 const key = zodios.getKeyByAlias('getUser');
 queryClient.invalidateQueries(key);
 ```
+
 ## Example
 
 ```tsx title="users.tsx"
-import { createSignal, For, Match, Show, Switch } from "solid-js";
-import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
-import { makeApi, Zodios } from "@zodios/core";
-import { ZodiosHooks } from "../src";
-import { z } from "zod";
+import { createSignal, For, Match, Show, Switch } from 'solid-js';
+import { QueryClient, QueryClientProvider } from '@tanstack/solid-query';
+import { makeApi, Zodios } from '@zodios/core';
+import { ZodiosHooks } from '../src';
+import { z } from 'zod/v4';
 
 // you can define schema before declaring the API to get back the type
 const userSchema = z
@@ -355,58 +403,58 @@ type Users = z.infer<typeof usersSchema>;
 
 const api = makeApi([
   {
-    method: "get",
-    path: "/users",
-    alias: "getUsers",
-    description: "Get all users",
+    method: 'get',
+    path: '/users',
+    alias: 'getUsers',
+    description: 'Get all users',
     parameters: [
       {
-        name: "page",
-        type: "Query",
+        name: 'page',
+        type: 'Query',
         schema: z.number().positive().optional(),
       },
       {
-        name: "limit",
-        type: "Query",
+        name: 'limit',
+        type: 'Query',
         schema: z.number().positive().optional(),
       },
     ],
     response: usersSchema,
   },
   {
-    method: "get",
-    path: "/users/:id",
-    description: "Get a user",
+    method: 'get',
+    path: '/users/:id',
+    description: 'Get a user',
     response: userSchema,
   },
   {
-    method: "post",
-    path: "/users",
-    alias: "createUser",
-    description: "Create a user",
+    method: 'post',
+    path: '/users',
+    alias: 'createUser',
+    description: 'Create a user',
     parameters: [
       {
-        name: "body",
-        type: "Body",
+        name: 'body',
+        type: 'Body',
         schema: createUserSchema,
       },
     ],
     response: userSchema,
   },
 ]);
-const baseUrl = "https://jsonplaceholder.typicode.com";
+const baseUrl = 'https://jsonplaceholder.typicode.com';
 
 const zodios = new Zodios(baseUrl, api);
-const zodiosHooks = new ZodiosHooks("jsonplaceholder", zodios);
+const zodiosHooks = new ZodiosHooks('jsonplaceholder', zodios);
 
 const Users = () => {
   const [page, setPage] = createSignal(0);
   const users = zodiosHooks.createInfiniteQuery(
-    "/users",
+    '/users',
     { queries: { limit: 10 } },
     {
       getPageParamList: () => {
-        return ["page"];
+        return ['page'];
       },
       getNextPageParam: () => {
         return {
@@ -417,7 +465,7 @@ const Users = () => {
           },
         };
       },
-    }
+    },
   );
   const user = zodiosHooks.createCreateUser(undefined, {
     onSuccess: () => users.invalidate(),
@@ -425,7 +473,7 @@ const Users = () => {
 
   return (
     <>
-      <button onClick={() => user.mutate({ name: "john" })}>create user</button>
+      <button onClick={() => user.mutate({ name: 'john' })}>create user</button>
       <Show when={users.hasNextPage}>
         <button onClick={() => users.fetchNextPage()}>next</button>
       </Show>

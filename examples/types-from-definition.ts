@@ -7,7 +7,7 @@ import {
   ZodiosPathParamByAlias,
   makeErrors,
 } from "../src/index";
-import z from "zod";
+import z from "zod/v4";
 
 const user = z.object({
   id: z.number(),

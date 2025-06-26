@@ -4,7 +4,7 @@ import {
   ZodiosHeaderParamsByAlias,
   Zodios,
 } from "../src/index";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 async function bootstrap() {
   const apiClient = new Zodios("https://jsonplaceholder.typicode.com", [
@@ -42,7 +42,7 @@ async function bootstrap() {
       path: "/users/:id",
       alias: "deleteUser",
       description: "Delete a user",
-      response: z.object({ }),
+      response: z.object({}),
     },
     {
       method: "post",
@@ -85,7 +85,7 @@ async function bootstrap() {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-    }
+    },
   );
   console.log(createdUser);
   const deletedUser = await apiClient.deleteUser(undefined, {

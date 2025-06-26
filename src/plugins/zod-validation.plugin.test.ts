@@ -1,5 +1,5 @@
 import type { AxiosResponse } from "axios";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { apiBuilder } from "../api";
 import { ReadonlyDeep } from "../utils.types";
 import { AnyZodiosRequestOptions } from "../zodios.types";
@@ -28,15 +28,15 @@ describe("zodValidationPlugin", () => {
     });
 
     it("should throw if endpoint is not found", async () => {
-      await expect(
-        plugin.request!(api, notExistingConfig)
-      ).rejects.toThrowError("No endpoint found for get /notExisting");
+      await expect(plugin.request!(api, notExistingConfig)).rejects.toThrow(
+        "No endpoint found for get /notExisting",
+      );
     });
 
     it("should verify parameters", async () => {
       const transformed = await plugin.request!(
         api,
-        createSampleConfig("/parse")
+        createSampleConfig("/parse"),
       );
 
       expect(transformed.data).toBe("123");
@@ -51,7 +51,7 @@ describe("zodValidationPlugin", () => {
     it("should transform parameters", async () => {
       const transformed = await plugin.request!(
         api,
-        createSampleConfig("/transform")
+        createSampleConfig("/transform"),
       );
 
       expect(transformed.data).toBe("123_transformed");
@@ -66,7 +66,7 @@ describe("zodValidationPlugin", () => {
     it("should transform empty string parameters", async () => {
       const transformed = await plugin.request!(
         api,
-        createEmptySampleConfig("/transform")
+        createEmptySampleConfig("/transform"),
       );
 
       expect(transformed.data).toBe("_transformed");
@@ -81,7 +81,7 @@ describe("zodValidationPlugin", () => {
     it("should generate default parameter when generateDefaults is activated", async () => {
       const defaulted = await pluginWithDefaults.request!(
         api,
-        createUndefinedSampleConfig("/defaults")
+        createUndefinedSampleConfig("/defaults"),
       );
 
       expect(defaulted.queries).toStrictEqual({
@@ -95,7 +95,7 @@ describe("zodValidationPlugin", () => {
     it("should not transform parameters when transform is disabled", async () => {
       const notTransformed = await pluginWithoutTransform.request!(
         api,
-        createSampleConfig("/transform")
+        createSampleConfig("/transform"),
       );
 
       expect(notTransformed.data).toBe("123");
@@ -110,7 +110,7 @@ describe("zodValidationPlugin", () => {
     it("should transform parameters (async)", async () => {
       const transformed = await plugin.request!(
         api,
-        createSampleConfig("/transformAsync")
+        createSampleConfig("/transformAsync"),
       );
 
       expect(transformed.data).toBe("123_transformed");
@@ -125,7 +125,7 @@ describe("zodValidationPlugin", () => {
     it("should not transform parameters (async) when transform is disabled", async () => {
       const notTransformed = await pluginWithoutTransform.request!(
         api,
-        createSampleConfig("/transformAsync")
+        createSampleConfig("/transformAsync"),
       );
 
       expect(notTransformed.data).toBe("123");
@@ -143,8 +143,8 @@ describe("zodValidationPlugin", () => {
         sampleQueryParam: 123,
       };
 
-      await expect(plugin.request!(api, badConfig)).rejects.toThrowError(
-        "Zodios: Invalid Query parameter 'sampleQueryParam'"
+      await expect(plugin.request!(api, badConfig)).rejects.toThrow(
+        "Zodios: Invalid Query parameter 'sampleQueryParam'",
       );
     });
   });
@@ -156,15 +156,15 @@ describe("zodValidationPlugin", () => {
 
     it("should throw if endpoint is not found", async () => {
       await expect(
-        plugin.response!(api, notExistingConfig, createSampleResponse())
-      ).rejects.toThrowError("No endpoint found for get /notExisting");
+        plugin.response!(api, notExistingConfig, createSampleResponse()),
+      ).rejects.toThrow("No endpoint found for get /notExisting");
     });
 
     it("should verify body", async () => {
       const transformed = await plugin.response!(
         api,
         createSampleConfig("/parse"),
-        createSampleResponse()
+        createSampleResponse(),
       );
 
       expect(transformed.data).toStrictEqual({
@@ -177,7 +177,7 @@ describe("zodValidationPlugin", () => {
       const transformed = await plugin.response!(
         api,
         createSampleConfig("/transform"),
-        createSampleResponse()
+        createSampleResponse(),
       );
 
       expect(transformed.data).toStrictEqual({
@@ -194,7 +194,7 @@ describe("zodValidationPlugin", () => {
           headers: {
             "content-type": "application/vnd.api+json; charset=utf-8",
           },
-        })
+        }),
       );
 
       expect(transformed.data).toStrictEqual({
@@ -207,7 +207,7 @@ describe("zodValidationPlugin", () => {
       const notTransformed = await pluginWithoutTransform.response!(
         api,
         createSampleConfig("/transform"),
-        createSampleResponse()
+        createSampleResponse(),
       );
 
       expect(notTransformed.data).toStrictEqual({
@@ -220,7 +220,7 @@ describe("zodValidationPlugin", () => {
       const transformed = await plugin.response!(
         api,
         createSampleConfig("/transformAsync"),
-        createSampleResponse()
+        createSampleResponse(),
       );
 
       expect(transformed.data).toStrictEqual({
@@ -233,7 +233,7 @@ describe("zodValidationPlugin", () => {
       const notTransformed = await pluginWithoutTransform.response!(
         api,
         createSampleConfig("/transformAsync"),
-        createSampleResponse()
+        createSampleResponse(),
       );
 
       expect(notTransformed.data).toStrictEqual({
@@ -247,20 +247,18 @@ describe("zodValidationPlugin", () => {
       badResponse.data.first = 123;
 
       await expect(
-        plugin.response!(api, createSampleConfig("/parse"), badResponse)
-      ).rejects
-        .toThrowError(`Zodios: Invalid response from endpoint 'post /parse'
+        plugin.response!(api, createSampleConfig("/parse"), badResponse),
+      ).rejects.toThrow(`Zodios: Invalid response from endpoint 'post /parse'
 status: 200 OK
 cause:
 [
   {
-    "code": "invalid_type",
     "expected": "string",
-    "received": "number",
+    "code": "invalid_type",
     "path": [
       "first"
     ],
-    "message": "Expected string, received number"
+    "message": "Invalid input: expected string, received number"
   }
 ]
 received:
@@ -301,14 +299,14 @@ received:
   });
 
   const createUndefinedSampleConfig = (
-    url: string
+    url: string,
   ): AnyZodiosRequestOptions => ({
     method: "get",
     url,
   });
 
   const createSampleResponse = (
-    { headers } = { headers: { "content-type": "application/json" } }
+    { headers } = { headers: { "content-type": "application/json" } },
   ) =>
     ({
       data: {
@@ -319,7 +317,7 @@ received:
       headers: headers,
       config: {},
       statusText: "OK",
-    } as unknown as AxiosResponse);
+    }) as unknown as AxiosResponse;
 
   const api = apiBuilder({
     path: "/parse",

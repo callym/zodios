@@ -9,7 +9,7 @@
     <br/>
     <a href="https://www.zodios.org/">Documentation</a>
  </p>
- 
+
  <p align="center">
    <a href="https://www.npmjs.com/package/@zodios/core">
    <img src="https://img.shields.io/npm/v/@zodios/core.svg" alt="langue typescript">
@@ -18,7 +18,7 @@
    <img alt="npm" src="https://img.shields.io/npm/dw/@zodios/core">
    </a>
    <a href="https://github.com/ecyrbe/zodios/blob/main/LICENSE">
-    <img alt="GitHub" src="https://img.shields.io/github/license/ecyrbe/zodios">   
+    <img alt="GitHub" src="https://img.shields.io/github/license/ecyrbe/zodios">
    </a>
    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/ecyrbe/zodios/ci.yml?branch=main">
  </p>
@@ -36,8 +36,8 @@ https://user-images.githubusercontent.com/633115/185851987-554f5686-cb78-4096-8f
 
 # What is it ?
 
-It's an axios compatible API client and an optional expressJS compatible API server with the following features:  
-  
+It's an axios compatible API client and an optional expressJS compatible API server with the following features:
+
 - really simple centralized API declaration
 - typescript autocompletion in your favorite IDE for URL and parameters
 - typescript response types
@@ -48,7 +48,7 @@ It's an axios compatible API client and an optional expressJS compatible API ser
 - `@tanstack/query` wrappers for react and solid (vue, svelte, etc, soon)
 - all expressJS features available (middlewares, etc.)
 
-  
+
 **Table of contents:**
 
 - [What is it ?](#what-is-it-)
@@ -78,7 +78,7 @@ or
 ```
 
 ## Server :
-  
+
 ```bash
 > npm install @zodios/core @zodios/express
 ```
@@ -96,10 +96,10 @@ For an almost complete example on how to use zodios and how to split your APIs d
 ## Declare your API with zodios
 
 Here is an example of API declaration with Zodios.
-  
+
 ```typescript
 import { Zodios } from "@zodios/core";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 const apiClient = new Zodios(
   "https://jsonplaceholder.typicode.com",
@@ -119,22 +119,22 @@ const apiClient = new Zodios(
 );
 ```
 
-Calling this API is now easy and has builtin autocomplete features :  
-  
+Calling this API is now easy and has builtin autocomplete features :
+
 ```typescript
 //   typed                     auto-complete path   auto-complete params
 //     ▼                               ▼                   ▼
 const user = await apiClient.get("/users/:id", { params: { id: 7 } });
 console.log(user);
 ```
-  
-It should output  
-  
+
+It should output
+
 ```js
 { id: 7, name: 'Kurtis Weissnat' }
 ```
 You can also use aliases :
-  
+
 ```typescript
 //   typed                     alias   auto-complete params
 //     ▼                        ▼                ▼
@@ -232,7 +232,7 @@ for Zod` / `Io-Ts` :
 
   - new feature, so no codemod needed
 
-- [ ] React/Solid:  
+- [ ] React/Solid:
 
    - make ZodiosHooks independant of Zodios client instance (axios, fetch)
 
@@ -260,8 +260,8 @@ So you should at least use the one provided by your IDE (vscode integrates a typ
 However, we will only support fixing bugs related to typings for versions of Typescript Language v4.5
 Earlier versions should work, but do not have TS tail recusion optimisation that impact the size of the API you can declare.
 
-Also note that Zodios do not embed any dependency. It's your Job to install the peer dependencies you need.  
-  
+Also note that Zodios do not embed any dependency. It's your Job to install the peer dependencies you need.
+
 Internally Zodios uses these libraries on all platforms :
 - zod
 - axios

@@ -1,5 +1,5 @@
 import { makeApi, makeEndpoint } from "../../src/index";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { devUser, User } from "./users";
 
 /**
@@ -22,7 +22,7 @@ export const devComment: z.ZodSchema<Comment> = z.lazy(() =>
     body_html: z.string(),
     user: devUser,
     children: z.array(devComment),
-  })
+  }),
 );
 export const devComments = z.array(devComment);
 

@@ -1,6 +1,6 @@
 import express from "express";
 import { AddressInfo } from "net";
-import z from "zod";
+import z from "zod/v4";
 import {
   makeApi,
   makeCrudApi,
@@ -36,8 +36,8 @@ describe("makeApi", () => {
           description: "Get all users",
           response: z.array(userSchema),
         },
-      ])
-    ).toThrowError("Zodios: Duplicate path 'get /users'");
+      ]),
+    ).toThrow("Zodios: Duplicate path 'get /users'");
   });
 
   it("should throw on duplicate alias", () => {
@@ -57,8 +57,8 @@ describe("makeApi", () => {
           description: "Get all users",
           response: z.array(userSchema),
         },
-      ])
-    ).toThrowError("Zodios: Duplicate alias 'getUsers'");
+      ]),
+    ).toThrow("Zodios: Duplicate alias 'getUsers'");
   });
 
   it("should throw on duplicate Body", () => {
@@ -85,8 +85,8 @@ describe("makeApi", () => {
           ],
           response: userSchema,
         },
-      ])
-    ).toThrowError("Zodios: Multiple body parameters in endpoint '/users'");
+      ]),
+    ).toThrow("Zodios: Multiple body parameters in endpoint '/users'");
   });
 
   it("should build with parameters (Path,Query,Body,Header)", () => {
@@ -102,37 +102,37 @@ describe("makeApi", () => {
         description: "Create a user",
         parameters: [
           {
-            name: "id",
+            name: "id" as const,
             type: "Path",
             description: "The user id",
             schema: z.number(),
           },
           {
-            name: "homonyms",
+            name: "homonyms" as const,
             type: "Query",
             description: "Allow homonyms",
             schema: optionalTrueSchema,
           },
           {
-            name: "email",
+            name: "email" as const,
             type: "Query",
             description: "create an email account for the user",
             schema: optionalTrueSchema,
           },
           {
-            name: "body",
+            name: "body" as const,
             type: "Body",
             description: "The object to create",
             schema: partialUserSchema,
           },
           {
-            name: "Authorization",
+            name: "Authorization" as const,
             type: "Header",
             description: "The user token",
             schema: bearerSchema,
           },
           {
-            name: "x-custom-header",
+            name: "x-custom-header" as const,
             type: "Header",
             description: "A custom header",
             schema: z.string(),
@@ -143,7 +143,7 @@ describe("makeApi", () => {
     ]);
     // check narrowing works
     const test: Assert<
-      typeof api,
+      (typeof api)[0]["parameters"],
       [
         {
           method: "post";
@@ -186,11 +186,11 @@ describe("makeApi", () => {
               type: "Header";
               description: string;
               schema: z.ZodString;
-            }
+            },
           ];
           response: typeof userSchema;
-        }
-      ]
+        },
+      ][0]["parameters"]
     > = true;
   });
 });
@@ -377,7 +377,7 @@ describe("makeCrudApi", () => {
           description: "Delete a user",
           response: userSchema,
         },
-      ])
+      ]),
     );
   });
 
@@ -407,7 +407,7 @@ describe("makeCrudApi", () => {
     const client = new Zodios(`http://localhost:${port}`, api);
     const user = await client.updateUser(
       { id: 2, name: "test2" },
-      { params: { id: 2 } }
+      { params: { id: 2 } },
     );
     expect(user).toEqual({ id: 2, name: "test2" });
   });
@@ -417,7 +417,7 @@ describe("makeCrudApi", () => {
     const client = new Zodios(`http://localhost:${port}`, api);
     const user = await client.patchUser(
       { name: "test2" },
-      { params: { id: 2 } }
+      { params: { id: 2 } },
     );
     expect(user).toEqual({ id: 2, name: "test2" });
   });
@@ -490,7 +490,7 @@ describe("mergeApis", () => {
           alias: "getAdmins";
           description: "Get all admins";
           response: typeof usersSchema;
-        }
+        },
       ]
     > = true;
   });
@@ -522,7 +522,7 @@ describe("apiBuilder", () => {
           alias: "getUsers";
           description: "Get all users";
           response: typeof usersSchema;
-        }
+        },
       ]
     > = true;
     expect(api).toEqual([
@@ -569,7 +569,7 @@ describe("apiBuilder", () => {
           alias: "getUser";
           description: "Get a user";
           response: typeof userSchema;
-        }
+        },
       ]
     > = true;
     expect(api).toEqual([
@@ -607,7 +607,7 @@ describe("apiBuilder", () => {
           alias: "getUsers";
           description: "Get all users";
           response: typeof usersSchema;
-        }
+        },
       ]
     > = true;
     expect(api).toEqual([

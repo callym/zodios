@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import express from "express";
 import { AddressInfo } from "net";
-import { z, ZodError } from "zod";
+import { z, ZodError } from "zod/v4";
 globalThis.FormData = require("form-data");
 import { Zodios } from "./zodios";
 import { ZodiosError } from "./zodios-error";
@@ -21,6 +21,7 @@ describe("Zodios", () => {
   beforeAll(async () => {
     app = express();
     app.use(express.json());
+    app.set("query parser", "extended");
     app.get("/token", (req, res) => {
       res.status(200).json({ token: req.headers.authorization });
     });
@@ -40,6 +41,7 @@ describe("Zodios", () => {
       res.status(502).json({ error: { message: "bad gateway" } });
     });
     app.get("/queries", (req, res) => {
+      console.log(req.query);
       res.status(200).json({
         queries: req.query.id,
       });
@@ -75,7 +77,7 @@ describe("Zodios", () => {
       express.urlencoded({ extended: false }),
       (req, res) => {
         res.status(200).json(req.body);
-      }
+      },
     );
     app.post("/text", express.text(), (req, res) => {
       res.status(200).send(req.body);
@@ -94,19 +96,17 @@ describe("Zodios", () => {
 
   it("should throw if baseUrl is not provided", () => {
     // @ts-ignore
-    expect(() => new Zodios(undefined, [])).toThrowError(
-      "Zodios: missing base url"
-    );
+    expect(() => new Zodios(undefined, [])).toThrow("Zodios: missing base url");
   });
 
   it("should throw if api is not provided", () => {
     // @ts-ignore
-    expect(() => new Zodios()).toThrowError("Zodios: missing api description");
+    expect(() => new Zodios()).toThrow("Zodios: missing api description");
   });
 
   it("should throw if api is not an array", () => {
     // @ts-ignore
-    expect(() => new Zodios({})).toThrowError("Zodios: api must be an array");
+    expect(() => new Zodios({})).toThrow("Zodios: api must be an array");
   });
 
   it("should return the underlying axios instance", () => {
@@ -151,8 +151,8 @@ describe("Zodios", () => {
               name: z.string(),
             }),
           },
-        ])
-    ).toThrowError("Zodios: Duplicate path 'get /:id'");
+        ]),
+    ).toThrow("Zodios: Duplicate path 'get /:id'");
   });
 
   it("should get base url", () => {
@@ -229,7 +229,7 @@ describe("Zodios", () => {
   it("should throw if invalid parameters when registering a plugin", () => {
     const zodios = new Zodios(`http://localhost:${port}`, []);
     // @ts-ignore
-    expect(() => zodios.use(0)).toThrowError("Zodios: invalid plugin");
+    expect(() => zodios.use(0)).toThrow("Zodios: invalid plugin");
   });
 
   it("should throw if invalid alias when registering a plugin", () => {
@@ -249,8 +249,8 @@ describe("Zodios", () => {
       zodios.use("tests", {
         // @ts-ignore
         request: async (_, config) => config,
-      })
-    ).toThrowError("Zodios: no alias 'tests' found to register plugin");
+      }),
+    ).toThrow("Zodios: no alias 'tests' found to register plugin");
   });
 
   it("should throw if invalid endpoint when registering a plugin", () => {
@@ -269,10 +269,8 @@ describe("Zodios", () => {
       zodios.use("get", "/test/:id", {
         // @ts-ignore
         request: async (_, config) => config,
-      })
-    ).toThrowError(
-      "Zodios: no endpoint 'get /test/:id' found to register plugin"
-    );
+      }),
+    ).toThrow("Zodios: no endpoint 'get /test/:id' found to register plugin");
   });
 
   it("should register a plugin by endpoint", () => {
@@ -329,7 +327,7 @@ describe("Zodios", () => {
           z.object({
             id: z.number(),
             name: z.string(),
-          })
+          }),
         ),
       },
     ]);
@@ -764,7 +762,7 @@ describe("Zodios", () => {
     expect(error).toBeInstanceOf(ZodiosError);
     expect((error as ZodiosError).cause).toBeInstanceOf(ZodError);
     expect((error as ZodiosError).message).toBe(
-      "Zodios: Invalid Path parameter 'uuid'"
+      "Zodios: Invalid Path parameter 'uuid'",
     );
   });
 
@@ -786,18 +784,17 @@ describe("Zodios", () => {
       expect(e).toBeInstanceOf(ZodiosError);
       expect((e as ZodiosError).cause).toBeInstanceOf(ZodError);
       expect((e as ZodiosError).message)
-        .toBe(`Zodios: Invalid response from endpoint 'get /:id'
+        .toBe(`Zodios: Invalid response from endpoint "get /:id"
 status: 200 OK
 cause:
 [
   {
-    "code": "invalid_type",
     "expected": "string",
-    "received": "undefined",
+    "code": "invalid_type",
     "path": [
       "more"
     ],
-    "message": "Required"
+    "message": "Invalid input: expected string, received undefined"
   }
 ]
 received:
@@ -976,10 +973,10 @@ received:
     expect(isErrorFromAlias(zodios.api, "getError404", error)).toBe(false);
 
     expect(
-      isErrorFromPath(zodios.api, "get", "/error/:id/error401", error)
+      isErrorFromPath(zodios.api, "get", "/error/:id/error401", error),
     ).toBe(true);
     expect(
-      isErrorFromPath(zodios.api, "get", "/error/:id/error404", error)
+      isErrorFromPath(zodios.api, "get", "/error/:id/error404", error),
     ).toBe(false);
   });
 
@@ -1026,10 +1023,10 @@ received:
     expect(isErrorFromAlias(zodios.api, "getError404", error)).toBe(false);
 
     expect(
-      isErrorFromPath(zodios.api, "get", "/error/:id/error401", error)
+      isErrorFromPath(zodios.api, "get", "/error/:id/error401", error),
     ).toBe(true);
     expect(
-      isErrorFromPath(zodios.api, "get", "/error/:id/error404", error)
+      isErrorFromPath(zodios.api, "get", "/error/:id/error404", error),
     ).toBe(false);
   });
 
@@ -1077,10 +1074,10 @@ received:
     expect(isErrorFromAlias(zodios.api, "getError404", error)).toBe(false);
 
     expect(
-      isErrorFromPath(zodios.api, "get", "/error/:id/error401/:message", error)
+      isErrorFromPath(zodios.api, "get", "/error/:id/error401/:message", error),
     ).toBe(true);
     expect(
-      isErrorFromPath(zodios.api, "get", "/error/:id/error404/:message", error)
+      isErrorFromPath(zodios.api, "get", "/error/:id/error404/:message", error),
     ).toBe(false);
   });
 
@@ -1120,7 +1117,7 @@ received:
           }),
         },
       ],
-      { validate: false }
+      { validate: false },
     );
     const response = await zodios.get("/:id", { params: { id: 1 } });
     expect(response).toEqual({
@@ -1229,7 +1226,7 @@ received:
     expect(response).toBeUndefined();
     expect(error).toBeInstanceOf(ZodiosError);
     expect((error as ZodiosError).message).toBe(
-      "Zodios: multipart/form-data body must be an object"
+      "Zodios: multipart/form-data body must be an object",
     );
   });
 
@@ -1285,7 +1282,7 @@ received:
     expect(response).toBeUndefined();
     expect(error).toBeInstanceOf(ZodiosError);
     expect((error as ZodiosError).message).toBe(
-      "Zodios: application/x-www-form-urlencoded body must be an object"
+      "Zodios: application/x-www-form-urlencoded body must be an object",
     );
   });
 

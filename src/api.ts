@@ -7,7 +7,7 @@ import {
   ZodiosEndpointDefinitions,
   ZodiosEndpointError,
 } from "./zodios.types";
-import z, { ZodRawShape } from "zod";
+import z, { ZodRawShape } from "zod/v4";
 import { capitalize } from "./utils";
 import { Narrow, TupleFlat, UnionToTuple } from "./utils.types";
 
@@ -44,7 +44,7 @@ export function checkApi<T extends ZodiosEndpointDefinitions>(api: T) {
       const bodyParams = endpoint.parameters.filter((p) => p.type === "Body");
       if (bodyParams.length > 1) {
         throw new Error(
-          `Zodios: Multiple body parameters in endpoint '${endpoint.path}'`
+          `Zodios: Multiple body parameters in endpoint '${endpoint.path}'`,
         );
       }
     }
@@ -59,7 +59,7 @@ export function checkApi<T extends ZodiosEndpointDefinitions>(api: T) {
  * @returns the api definitions
  */
 export function makeApi<Api extends ZodiosEndpointDefinitions>(
-  api: Narrow<Api>
+  api: Narrow<Api>,
 ): Api {
   checkApi(api);
   return api as Api;
@@ -73,7 +73,7 @@ export function makeApi<Api extends ZodiosEndpointDefinitions>(
  * @returns the api parameter definitions
  */
 export function makeParameters<
-  ParameterDescriptions extends ZodiosEndpointParameter[]
+  ParameterDescriptions extends ZodiosEndpointParameter[],
 >(params: Narrow<ParameterDescriptions>): ParameterDescriptions {
   return params as ParameterDescriptions;
 }
@@ -85,7 +85,7 @@ export function parametersBuilder() {
 type ObjectToQueryParameters<
   Type extends "Query" | "Path" | "Header",
   T extends Record<string, z.ZodType<any, any, any>>,
-  Keys = UnionToTuple<keyof T>
+  Keys = UnionToTuple<keyof T>,
 > = {
   [Index in keyof Keys]: {
     name: Keys[Index];
@@ -101,7 +101,7 @@ class ParametersBuilder<T extends ZodiosEndpointParameter[]> {
   addParameter<
     Name extends string,
     Type extends "Path" | "Query" | "Body" | "Header",
-    Schema extends z.ZodType<any, any, any>
+    Schema extends z.ZodType<any, any, any>,
   >(name: Name, type: Type, schema: Schema) {
     return new ParametersBuilder<
       [...T, { name: Name; type: Type; description?: string; schema: Schema }]
@@ -113,7 +113,7 @@ class ParametersBuilder<T extends ZodiosEndpointParameter[]> {
 
   addParameters<
     Type extends "Query" | "Path" | "Header",
-    Schemas extends Record<string, z.ZodType<any, any, any>>
+    Schemas extends Record<string, z.ZodType<any, any, any>>,
   >(type: Type, schemas: Schemas) {
     const parameters = Object.keys(schemas).map((key) => ({
       name: key,
@@ -127,7 +127,7 @@ class ParametersBuilder<T extends ZodiosEndpointParameter[]> {
         ...Extract<
           ObjectToQueryParameters<Type, Schemas>,
           ZodiosEndpointParameter[]
-        >
+        >,
       ]
     >([...this.params, ...parameters] as any);
   }
@@ -138,39 +138,39 @@ class ParametersBuilder<T extends ZodiosEndpointParameter[]> {
 
   addQuery<Name extends string, Schema extends z.ZodType<any, any, any>>(
     name: Name,
-    schema: Schema
+    schema: Schema,
   ) {
     return this.addParameter(name, "Query", schema);
   }
 
   addPath<Name extends string, Schema extends z.ZodType<any, any, any>>(
     name: Name,
-    schema: Schema
+    schema: Schema,
   ) {
     return this.addParameter(name, "Path", schema);
   }
 
   addHeader<Name extends string, Schema extends z.ZodType<any, any, any>>(
     name: Name,
-    schema: Schema
+    schema: Schema,
   ) {
     return this.addParameter(name, "Header", schema);
   }
 
   addQueries<Schemas extends Record<string, z.ZodType<any, any, any>>>(
-    schemas: Schemas
+    schemas: Schemas,
   ) {
     return this.addParameters("Query", schemas);
   }
 
   addPaths<Schemas extends Record<string, z.ZodType<any, any, any>>>(
-    schemas: Schemas
+    schemas: Schemas,
   ) {
     return this.addParameters("Path", schemas);
   }
 
   addHeaders<Schemas extends Record<string, z.ZodType<any, any, any>>>(
-    schemas: Schemas
+    schemas: Schemas,
   ) {
     return this.addParameters("Header", schemas);
   }
@@ -188,7 +188,7 @@ class ParametersBuilder<T extends ZodiosEndpointParameter[]> {
  * @returns the error definitions
  */
 export function makeErrors<ErrorDescription extends ZodiosEndpointError[]>(
-  errors: Narrow<ErrorDescription>
+  errors: Narrow<ErrorDescription>,
 ): ErrorDescription {
   return errors as ErrorDescription;
 }
@@ -201,14 +201,14 @@ export function makeErrors<ErrorDescription extends ZodiosEndpointError[]>(
  * @returns the endpoint definition
  */
 export function makeEndpoint<T extends ZodiosEndpointDefinition<any>>(
-  endpoint: Narrow<T>
+  endpoint: Narrow<T>,
 ): T {
   return endpoint as T;
 }
 export class Builder<T extends ZodiosEndpointDefinitions> {
   constructor(private api: T) {}
   addEndpoint<E extends ZodiosEndpointDefinition>(
-    endpoint: Narrow<E>
+    endpoint: Narrow<E>,
   ): Builder<[...T, E]> {
     if (this.api.length === 0) {
       this.api = [endpoint] as T;
@@ -231,7 +231,7 @@ export class Builder<T extends ZodiosEndpointDefinitions> {
  */
 export function apiBuilder(): Builder<[]>;
 export function apiBuilder<T extends ZodiosEndpointDefinition<any>>(
-  endpoint: Narrow<T>
+  endpoint: Narrow<T>,
 ): Builder<[T]>;
 export function apiBuilder(endpoint?: any) {
   if (!endpoint) return new Builder([]);
@@ -246,7 +246,7 @@ export function apiBuilder(endpoint?: any) {
  */
 export function makeCrudApi<
   T extends string,
-  S extends z.ZodObject<z.ZodRawShape>
+  S extends z.ZodObject<z.ZodRawShape>,
 >(resource: T, schema: S) {
   type Schema = z.input<S>;
   const capitalizedResource = capitalize(resource);
@@ -282,7 +282,7 @@ export function makeCrudApi<
           name: "body",
           type: "Body",
           description: "The object to create",
-          schema: schema.partial() as z.Schema<Partial<Schema>>,
+          schema: schema.partial(),
         },
       ],
       // @ts-expect-error
@@ -319,7 +319,7 @@ export function makeCrudApi<
           name: "body",
           type: "Body",
           description: "The object to patch",
-          schema: schema.partial() as z.Schema<Partial<Schema>>,
+          schema: schema.partial(),
         },
       ],
       // @ts-expect-error
@@ -345,7 +345,7 @@ type CleanPath<Path extends string> = Path extends `${infer PClean}/`
 type MapApiPath<
   Path extends string,
   Api,
-  Acc extends unknown[] = []
+  Acc extends unknown[] = [],
 > = Api extends readonly [infer Head, ...infer Tail]
   ? MapApiPath<
       Path,
@@ -358,7 +358,7 @@ type MapApiPath<
               ? CleanPath<`${Path}${Head[K]}`>
               : Head[K]
             : Head[K];
-        }
+        },
       ]
     >
   : Acc;
@@ -369,7 +369,7 @@ type MergeApis<
     {
       [K in keyof Apis]: K extends string ? MapApiPath<K, Apis[K]> : never;
     }[keyof Apis]
-  >
+  >,
 > = TupleFlat<MergedPathApis>;
 
 function cleanPath(path: string) {
@@ -384,7 +384,7 @@ function cleanPath(path: string) {
  */
 export function prefixApi<
   Prefix extends string,
-  Api extends ZodiosEndpointDefinition[]
+  Api extends ZodiosEndpointDefinition[],
 >(prefix: Prefix, api: Api) {
   return api.map((endpoint) => ({
     ...endpoint,
@@ -406,7 +406,7 @@ export function prefixApi<
  * ```
  */
 export function mergeApis<
-  Apis extends Record<string, ZodiosEndpointDefinition[]>
+  Apis extends Record<string, ZodiosEndpointDefinition[]>,
 >(apis: Apis): MergeApis<Apis> {
   return Object.keys(apis).flatMap((key) => prefixApi(key, apis[key])) as any;
 }

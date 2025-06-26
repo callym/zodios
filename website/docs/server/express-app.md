@@ -53,7 +53,7 @@ type RouterValidationErrorHandler = (
 
 ```ts
 import { zodiosContext } from "@zodios/express";
-import z from "zod";
+import z from "zod/v4";
 import { userApi } from "../../common/api";
 import { userMiddleware } from "./userMiddleware";
 
@@ -81,7 +81,7 @@ app.get("/users/:id", (req, res) => {
       //              ▼
       id: req.params.id,
       name: "John Doe",
-    });    
+    });
   }
   return res.status(403).end();
 })
@@ -121,7 +121,7 @@ Zodios express can infer the status code to match your API error response and al
 ```typescript title="/src/server/app.ts"
 import { makeApi } from "@zodios/core";
 import { zodiosApp } from "@zodios/express";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 const userApi = makeApi([
   {

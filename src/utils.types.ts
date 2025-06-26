@@ -1,4 +1,4 @@
-import { z, ZodType } from "zod";
+import { z, ZodType } from "zod/v4";
 
 /**
  * filter an array type by a predicate value
@@ -9,7 +9,7 @@ import { z, ZodType } from "zod";
 export type FilterArrayByValue<
   T extends unknown[] | undefined,
   C,
-  Acc extends unknown[] = []
+  Acc extends unknown[] = [],
 > = T extends [infer Head, ...infer Tail]
   ? Head extends C
     ? FilterArrayByValue<Tail, C, [...Acc, Head]>
@@ -25,7 +25,7 @@ export type FilterArrayByValue<
 export type FilterArrayByKey<
   T extends unknown[],
   K extends string,
-  Acc extends unknown[] = []
+  Acc extends unknown[] = [],
 > = T extends [infer Head, ...infer Tail]
   ? Head extends { [Key in K]: unknown }
     ? FilterArrayByKey<Tail, K, [...Acc, Head]>
@@ -39,7 +39,7 @@ export type FilterArrayByKey<
  */
 export type DefinedArray<
   T extends unknown[],
-  Acc extends unknown[] = []
+  Acc extends unknown[] = [],
 > = T extends [infer Head, ...infer Tail]
   ? Head extends undefined
     ? DefinedArray<Tail, Acc>
@@ -141,11 +141,8 @@ export type PickDefined<T> = Pick<
 /**
  * check if two types are equal
  */
-export type IfEquals<T, U, Y = unknown, N = never> = (<G>() => G extends T
-  ? 1
-  : 2) extends <G>() => G extends U ? 1 : 2
-  ? Y
-  : N;
+export type IfEquals<T, U, Y = unknown, N = never> =
+  (<G>() => G extends T ? 1 : 2) extends <G>() => G extends U ? 1 : 2 ? Y : N;
 
 /**
  * get never if empty type
@@ -207,10 +204,10 @@ export type DeepReadonlyObject<T> = {
 export type ReadonlyDeep<T> = T extends (infer R)[]
   ? ReadonlyArrayDeep<R>
   : T extends Function
-  ? T
-  : T extends object
-  ? DeepReadonlyObject<T>
-  : T;
+    ? T
+    : T extends object
+      ? DeepReadonlyObject<T>
+      : T;
 
 export type MaybeReadonly<T> = T | ReadonlyDeep<T>;
 
@@ -222,7 +219,7 @@ export type MaybeReadonly<T> = T | ReadonlyDeep<T>;
 export type MapSchemaParameters<
   T,
   Frontend extends boolean = true,
-  Acc = {}
+  Acc = {},
 > = T extends [infer Head, ...infer Tail]
   ? Head extends {
       name: infer Name;
@@ -258,17 +255,17 @@ export type MapSchemaParameters<
 export type Split<
   Str,
   Sep extends string,
-  Acc extends string[] = []
+  Acc extends string[] = [],
 > = Str extends ""
   ? Acc
   : Str extends `${infer T}${Sep}${infer U}`
-  ? Split<U, Sep, [...Acc, T]>
-  : [...Acc, Str];
+    ? Split<U, Sep, [...Acc, T]>
+    : [...Acc, Str];
 
 type ConcatSplits<
   Parts extends string[],
   Seps extends string[],
-  Acc extends string[] = []
+  Acc extends string[] = [],
 > = Parts extends [infer First extends string, ...infer Rest extends string[]]
   ? ConcatSplits<Rest, Seps, [...Acc, ...SplitMany<First, Seps>]>
   : Acc;
@@ -282,10 +279,10 @@ type ConcatSplits<
 export type SplitMany<
   Str extends string,
   Sep extends string[],
-  Acc extends string[] = []
+  Acc extends string[] = [],
 > = Sep extends [
   infer FirstSep extends string,
-  ...infer RestSep extends string[]
+  ...infer RestSep extends string[],
 ]
   ? ConcatSplits<Split<Str, FirstSep>, RestSep>
   : [Str, ...Acc];
@@ -294,7 +291,7 @@ type PathSeparator = ["/", "?", "&", "#", "=", "(", ")", "[", "]", "%"];
 
 type FilterParams<Params, Acc extends string[] = []> = Params extends [
   infer First,
-  ...infer Rest
+  ...infer Rest,
 ]
   ? First extends `${string}:${infer Param}`
     ? FilterParams<Rest, [...Acc, ...Split<Param, ":">]>
@@ -352,7 +349,7 @@ export type PickRequired<T, K extends keyof T> = Merge<T, { [P in K]-?: T[P] }>;
  */
 export type TupleFlat<T, Acc extends unknown[] = []> = T extends [
   infer Head,
-  ...infer Tail
+  ...infer Tail,
 ]
   ? Head extends unknown[]
     ? TupleFlat<Tail, [...Acc, ...Head]>
@@ -375,11 +372,12 @@ export type UnionToIntersection<union> = (
  * @param Union - Union of any types
  * @returns Last element of union
  */
-type GetUnionLast<Union> = UnionToIntersection<
-  Union extends any ? () => Union : never
-> extends () => infer Last
-  ? Last
-  : never;
+type GetUnionLast<Union> =
+  UnionToIntersection<
+    Union extends any ? () => Union : never
+  > extends () => infer Last
+    ? Last
+    : never;
 
 /**
  * Convert union to tuple
@@ -387,7 +385,7 @@ type GetUnionLast<Union> = UnionToIntersection<
  * @returns Tuple of each elements in the union
  */
 export type UnionToTuple<Union, Tuple extends unknown[] = []> = [
-  Union
+  Union,
 ] extends [never]
   ? Tuple
   : UnionToTuple<

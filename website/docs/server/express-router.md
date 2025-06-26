@@ -12,7 +12,7 @@ For more information on how to use express Router, check out the [Express docume
 
 ## `zodiosRouter`
 
-To upgrade an existing express router with typesafety, replace your `express.Router()` calls to `zodiosRouter(api)`.  
+To upgrade an existing express router with typesafety, replace your `express.Router()` calls to `zodiosRouter(api)`.
 
 ```ts
 function zodiosRouter(api?: ZodiosEndpointDescriptions, options?: ZodiosRouterOptions): ZodiosRouter
@@ -58,7 +58,7 @@ type RouterValidationErrorHandler = (
 ```ts
 
 import { zodiosContext } from "@zodios/express";
-import z from "zod";
+import z from "zod/v4";
 import { userApi } from "../../common/api";
 import { userMiddleware } from "./userMiddleware";
 

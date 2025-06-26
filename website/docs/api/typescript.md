@@ -11,13 +11,14 @@ Even though zodios is written in typescript, you can use it with javascript. How
 `ApiOf` is a type helper that extracts the api definition type from your zodios client instance.
 
 ```ts
-import { ApiOf, Zodios } from '@zodios/core';;
+import { ApiOf, Zodios } from '@zodios/core';
 import { myApiDefinition } from './api-definition';
 
 const client = new Zodios(myApiDefinition);
 
 type MyApi = ApiOf<typeof client>;
 ```
+
 ## `ZodiosBodyByPath`
 
 `ZodiosBodyByPath` is a type helper that extracts the body type of a request from your api definition.
@@ -26,7 +27,7 @@ type MyApi = ApiOf<typeof client>;
 import { ZodiosBodyByPath } from '@zodios/core';
 import { MyApi } from './my-api';
 
-type User = ZodiosBodyByPath<MyApi,'post','/users'>;
+type User = ZodiosBodyByPath<MyApi, 'post', '/users'>;
 ```
 
 ## `ZodiosBodyByAlias`
@@ -37,8 +38,9 @@ type User = ZodiosBodyByPath<MyApi,'post','/users'>;
 import { ZodiosBodyByAlias } from '@zodios/core';
 import { MyApi } from './my-api';
 
-type User = ZodiosBodyByAlias<MyApi,'createUsers'>;
+type User = ZodiosBodyByAlias<MyApi, 'createUsers'>;
 ```
+
 ## `ZodiosHeaderParamsByPath`
 
 `ZodiosHeaderParamsByPath` is a type helper that extracts the header params type of a request from your api definition.
@@ -47,8 +49,13 @@ type User = ZodiosBodyByAlias<MyApi,'createUsers'>;
 import { ZodiosHeaderParamsByPath } from '@zodios/core';
 import { MyApi } from './my-api';
 
-type CreateUsersHeaderParams = ZodiosHeaderParamsByPath<MyApi,'post','/users'>;
+type CreateUsersHeaderParams = ZodiosHeaderParamsByPath<
+  MyApi,
+  'post',
+  '/users'
+>;
 ```
+
 ## `ZodiosHeaderParamsByAlias`
 
 `ZodiosHeaderParamsByAlias` is a type helper that extracts the header params type of a request from your api definition.
@@ -57,7 +64,7 @@ type CreateUsersHeaderParams = ZodiosHeaderParamsByPath<MyApi,'post','/users'>;
 import { ZodiosHeaderParamsByAlias } from '@zodios/core';
 import { MyApi } from './my-api';
 
-type CreateUsersHeaderParams = ZodiosHeaderParamsByAlias<MyApi,'createUsers'>;
+type CreateUsersHeaderParams = ZodiosHeaderParamsByAlias<MyApi, 'createUsers'>;
 ```
 
 ## `ZodiosPathParamsByPath`
@@ -68,18 +75,20 @@ type CreateUsersHeaderParams = ZodiosHeaderParamsByAlias<MyApi,'createUsers'>;
 import { ZodiosPathParamsByPath } from '@zodios/core';
 import { MyApi } from './my-api';
 
-type GetUserPathParams = ZodiosPathParamsByPath<MyApi,'get','/users/:id'>;
+type GetUserPathParams = ZodiosPathParamsByPath<MyApi, 'get', '/users/:id'>;
 ```
+
 ## `ZodiosPathParamByAlias`
 
 `ZodiosPathParamByAlias` is a type helper that extracts the path params type of a request from your api definition.
-  
+
 ```ts
 import { ZodiosPathParamByAlias } from '@zodios/core';
 import { MyApi } from './my-api';
 
-type GetUserPathParams = ZodiosPathParamByAlias<MyApi,'getUser'>;
+type GetUserPathParams = ZodiosPathParamByAlias<MyApi, 'getUser'>;
 ```
+
 ## `ZodiosResponseByPath`
 
 `ZodiosResponseByPath` is a type helper that extracts the response type of a request from your api definition.
@@ -88,7 +97,7 @@ type GetUserPathParams = ZodiosPathParamByAlias<MyApi,'getUser'>;
 import { ZodiosResponseByPath } from '@zodios/core';
 import { MyApi } from './my-api';
 
-type Users = ZodiosResponseByPath<MyApi,'get','/users'>;
+type Users = ZodiosResponseByPath<MyApi, 'get', '/users'>;
 ```
 
 ## `ZodiosResponseByAlias`
@@ -99,8 +108,9 @@ type Users = ZodiosResponseByPath<MyApi,'get','/users'>;
 import { ZodiosResponseByAlias } from '@zodios/core';
 import { MyApi } from './my-api';
 
-type Users = ZodiosResponseByAlias<MyApi,'getUsers'>;
+type Users = ZodiosResponseByAlias<MyApi, 'getUsers'>;
 ```
+
 ## `ZodiosQueryParamsByPath`
 
 `ZodiosQueryParamsByPath` is a type helper that extracts the query params type of a request from your api definition.
@@ -109,8 +119,9 @@ type Users = ZodiosResponseByAlias<MyApi,'getUsers'>;
 import { ZodiosQueryParamsByPath } from '@zodios/core';
 import { MyApi } from './my-api';
 
-type GetUsersQueryParams = ZodiosQueryParamsByPath<MyApi,'get','/users'>;
+type GetUsersQueryParams = ZodiosQueryParamsByPath<MyApi, 'get', '/users'>;
 ```
+
 ## `ZodiosQueryParamsByAlias`
 
 `ZodiosQueryParamsByAlias` is a type helper that extracts the query params type of a request from your api definition.
@@ -119,8 +130,9 @@ type GetUsersQueryParams = ZodiosQueryParamsByPath<MyApi,'get','/users'>;
 import { ZodiosQueryParamsByAlias } from '@zodios/core';
 import { MyApi } from './my-api';
 
-type GetUsersQueryParams = ZodiosQueryParamsByAlias<MyApi,'getUsers'>;
+type GetUsersQueryParams = ZodiosQueryParamsByAlias<MyApi, 'getUsers'>;
 ```
+
 ## `ZodiosErrorByPath`
 
 `ZodiosErrorByPath` is a type helper that extracts the error type of a request from your api definition given a status code.
@@ -129,8 +141,9 @@ type GetUsersQueryParams = ZodiosQueryParamsByAlias<MyApi,'getUsers'>;
 import { ZodiosErrorByPath } from '@zodios/core';
 import { MyApi } from './my-api';
 
-type NotFoundUsersError = ZodiosErrorByPath<MyApi,'get','/users',404>;
+type NotFoundUsersError = ZodiosErrorByPath<MyApi, 'get', '/users', 404>;
 ```
+
 ## `ZodiosErrorByAlias`
 
 `ZodiosErrorByAlias` is a type helper that extracts the error type of a request from your api definition given a status code.
@@ -139,8 +152,9 @@ type NotFoundUsersError = ZodiosErrorByPath<MyApi,'get','/users',404>;
 import { ZodiosErrorByAlias } from '@zodios/core';
 import { MyApi } from './my-api';
 
-type NotFoundUsersError = ZodiosErrorByAlias<MyApi,'getUsers',404>;
+type NotFoundUsersError = ZodiosErrorByAlias<MyApi, 'getUsers', 404>;
 ```
+
 ## Example
 
 ```ts
@@ -150,8 +164,8 @@ import {
   ZodiosResponseByPath,
   ZodiosPathParamsByPath,
   ZodiosQueryParamsByPath,
-} from "@zodios/code";
-import z from "zod";
+} from '@zodios/code';
+import z from 'zod/v4';
 
 const user = z.object({
   id: z.number(),
@@ -160,25 +174,25 @@ const user = z.object({
   phone: z.string(),
 });
 
-const api = makeCrudApi("user", user);
+const api = makeCrudApi('user', user);
 
 type User = z.infer<typeof user>;
 type Api = typeof api;
 
-type Users = ZodiosResponseByPath<Api, "get", "/users">;
+type Users = ZodiosResponseByPath<Api, 'get', '/users'>;
 //    ^? type Users = { id: number; name: string; email: string; phone: string; }[]
-type UserById = ZodiosResponseByPath<Api, "get", "/users/:id">;
+type UserById = ZodiosResponseByPath<Api, 'get', '/users/:id'>;
 //    ^? type UserById = { id: number; name: string; email: string; phone: string; }
-type GetUserParams = ZodiosPathParamsByPath<Api,'get',"/users/:id">;
+type GetUserParams = ZodiosPathParamsByPath<Api, 'get', '/users/:id'>;
 //    ^? type GetUserParams = { id: number; }
-type GetUserQueries = ZodiosQueryParamsByPath<Api, "get", "/users/:id">;
+type GetUserQueries = ZodiosQueryParamsByPath<Api, 'get', '/users/:id'>;
 //    ^? type GetUserQueries = never
-type CreateUserBody = ZodiosBodyByPath<Api, "post", "/users">;
+type CreateUserBody = ZodiosBodyByPath<Api, 'post', '/users'>;
 //    ^? type CreateUserBody = { name: string; email: string; phone: string; }
-type CreateUserResponse = ZodiosResponseByPath<Api, "post", "/users">;
+type CreateUserResponse = ZodiosResponseByPath<Api, 'post', '/users'>;
 //    ^? type CreateUserResponse = { id: number; name: string; email: string; phone: string; }
-type UpdateUserBody = ZodiosBodyByPath<Api, "put", "/users/:id">;
+type UpdateUserBody = ZodiosBodyByPath<Api, 'put', '/users/:id'>;
 //    ^? type UpdateUserBody = { name: string; email: string; phone: string; }
-type PatchUserBody = ZodiosBodyByPath<Api, "patch", "/users/:id">;
+type PatchUserBody = ZodiosBodyByPath<Api, 'patch', '/users/:id'>;
 //    ^? type PatchUserBody = { name?: string | undefined; email?: string | undefined; phone?: string | undefined; }
 ```

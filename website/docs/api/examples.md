@@ -13,7 +13,7 @@ There is a complete example of full dev.to API in github [examples](https://gith
 Here is an example of API definition for [dev.to](https://dev.to) user API.
 
 ```ts
-import { z } from "zod";
+import { z } from "zod/v4";
 import { makeApi, makeErrors } from "@zodios/core";
 
 export const devUser = z.object({
@@ -63,7 +63,6 @@ export const userErrors = makeErrors([
   },
 ]);
 
-
 export type ProfileImage = z.infer<typeof devProfileImage>;
 
 export const userApi = makeApi([
@@ -93,4 +92,3 @@ export const userApi = makeApi([
   },
 ]);
 ```
-

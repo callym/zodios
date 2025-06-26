@@ -4,25 +4,27 @@ sidebar_position: 4
 
 # React hooks
 
-Zodios comes with a Query and Mutation hook helper.  
+Zodios comes with a Query and Mutation hook helper.
 It's a thin wrapper around React-Query but with zodios auto completion and automatic key management.
 No need to remember your keys anymore.
-  
+
 Zodios query hook also returns an invalidation helper to allow you to reset react query cache easily.
 
 ## Zodios Hooks instance
 
-When creating an instance or zodios hooks, you need to provide a name that will be used as `react-query` key prefix and your instance of Zodios Api Client.  
+When creating an instance or zodios hooks, you need to provide a name that will be used as `react-query` key prefix and your instance of Zodios Api Client.
 
 ```ts
 new ZodiosHooks(name: string, client: Zodios)
 ```
 
 **Example**
+
 ```ts
 const apiClient = new Zodios(baseUrl, [...]);
 const apiHooks = new ZodiosHooks("myAPI", apiClient);
 ```
+
 ## Zodios hooks methods
 
 ### `hooks.use[Alias]`
@@ -32,6 +34,7 @@ You will usually want to use aliases to call your endpoints. You can define them
 #### query alias:
 
 Query alias hooks will return a `QueryResult` object from `react-query` with:
+
 - the response data and all react-query result properties
 - the generated `key`
 - the `invalidate` helper.
@@ -41,44 +44,60 @@ function use[Alias](config?: ZodiosRequestOptions, queryOptions: QueryOptions): 
 ```
 
 **example**:
+
 ```ts
 // identical to hooks.useQuery("/users")
-const { data: users, isLoading, isError, invalidate, key } =  hooks.useGetUsers();
+const {
+  data: users,
+  isLoading,
+  isError,
+  invalidate,
+  key,
+} = hooks.useGetUsers();
 ```
 
 #### immutable query alias:
+
 ```ts
 function use[Alias](body: Body, config?: ZodiosRequestOptions, queryOptions: QueryOptions): QueryResult<Response>;
 ```
 
 **example**:
+
 ```ts
 // identical to hooks.useImmutableQuery("/users/search")
-const { data: users, isLoading, isError } =  hooks.useSearchUsers({ name: "John" });
+const {
+  data: users,
+  isLoading,
+  isError,
+} = hooks.useSearchUsers({ name: 'John' });
 ```
 
 :::note
 Immutable query aliases are only available for `post` endpoints.
 you also need to set the `immutable` option to `true` in your API definition endpoint if you want alias to use `useImmutableQuery` hook.
 :::
-#### mutation alias 
+
+#### mutation alias
 
 Alias for `post`, `put`, `patch`, `delete` endpoints:
+
 ```ts
 function use[Alias](config?: ZodiosRequestOptions, queryOptions?: QueryOptions): MutationResult<Response>;
 ```
 
 **example**:
+
 ```ts
 // identical to usePost("/users") or useMutation("post","/users")
 const { mutate } = hooks.useCreateUser();
-
 ```
 
 ### `zodios.useQuery`
 
 Generic request method that allows to do queries (same as useGet).
 Query hooks will return a `QueryResult` object from `react-query` with:
+
 - the response data and all react-query result properties
 - the generated `key`
 - the `invalidate` helper.
@@ -88,6 +107,7 @@ useQuery(path: string, config?: ZodiosRequestOptions, queryOptions?: QueryOption
 ```
 
 **Example**:
+
 ```ts
 const { data: users, isLoading, isError } = hooks.useQuery('/users');
 ```
@@ -105,14 +125,18 @@ useImmutableQuery(path: string, body: Body ,config?: ZodiosRequestOptions, query
 ```
 
 **Example**:
+
 ```ts
-const { data: users, isLoading, isError } = hooks.useImmutableQuery('/users/search', { name: "John" });
+const {
+  data: users,
+  isLoading,
+  isError,
+} = hooks.useImmutableQuery('/users/search', { name: 'John' });
 ```
 
 :::note
 check [react-query documentation](https://react-query.tanstack.com/reference/useQuery) for more informations on `QueryResult` and `QueryOptions`.
 :::
-
 
 ### `zodios.useInfiniteQuery`
 
@@ -125,6 +149,7 @@ useInfiniteQuery(path: string, config?: ZodiosRequestOptions, infiniteQueryOptio
 Compared to native react-query infinite query, you also need to provide a function named `getPageParamList` to tell zodios which parameters will be used to paginate. Indeed, zodios needs to know it to be able to generate the correct query key automatically for you.
 
 **Example**:
+
 ```ts
   const { data: userPages, isFectching, fetchNextPage } = apiHooks.useInfiniteQuery(
     "/users",
@@ -160,6 +185,7 @@ useImmutableInfiniteQuery(path: string, body: Body ,config?: ZodiosRequestOption
 Compared to native react-query infinite query, you also need to provide a function named `getPageParamList` to tell zodios which parameters will be used to paginate. Indeed, zodios needs to know it to be able to generate the correct query key automatically for you.
 
 **Example**:
+
 ```ts
   const { data: userPages, isFectching, fetchNextPage } = apiHooks.useImmutableInfiniteQuery(
     "/users/search",
@@ -196,8 +222,9 @@ useMutation(method: string, path: string, config: ZodiosRequestOptions, reactQue
 ```
 
 **Example**:
+
 ```ts
-const { mutate } = hooks.useMutation('post','/users');
+const { mutate } = hooks.useMutation('post', '/users');
 ```
 
 :::note
@@ -207,6 +234,7 @@ check [react-query documentation](https://react-query.tanstack.com/reference/use
 ### `zodios.useGet`
 
 Query hooks will return a `QueryResult` object from `react-query` with:
+
 - the response data and all react-query result properties
 - the generated `key`
 - the `invalidate` helper.
@@ -216,8 +244,15 @@ useGet(path: string, config?: ZodiosRequestOptions, reactQueryOptions?: ReactQue
 ```
 
 **Example**:
+
 ```ts
-const { data: user, isLoading, isError, invalidate, key } = hooks.useGet("/users/:id", { params: { id: 1 } });
+const {
+  data: user,
+  isLoading,
+  isError,
+  invalidate,
+  key,
+} = hooks.useGet('/users/:id', { params: { id: 1 } });
 ```
 
 ### `zodios.usePost`
@@ -227,8 +262,9 @@ usePost(path: string, config?: ZodiosRequestOptions, reactQueryOptions?: ReactQu
 ```
 
 **Example**:
+
 ```ts
-const { mutate } = hooks.usePost("/users");
+const { mutate } = hooks.usePost('/users');
 ```
 
 ### `zodios.usePut`
@@ -238,8 +274,9 @@ usePut(path: string, config?: ZodiosRequestOptions, reactQueryOptions?: ReactQue
 ```
 
 **Example**:
+
 ```ts
-const { mutate } = hooks.usePut("/users/:id", { params: { id: 1 } });
+const { mutate } = hooks.usePut('/users/:id', { params: { id: 1 } });
 ```
 
 ### `zodios.usePatch`
@@ -249,8 +286,9 @@ usePatch(path: string, config?: ZodiosRequestOptions, reactQueryOptions?: ReactQ
 ```
 
 **Example**:
+
 ```ts
-const { mutate } = hooks.usePatch("/users/:id", {params: {id: 1}});
+const { mutate } = hooks.usePatch('/users/:id', { params: { id: 1 } });
 ```
 
 ### `zodios.useDelete`
@@ -260,9 +298,11 @@ useDelete(path: string, config?: ZodiosRequestOptions, reactQueryOptions?: React
 ```
 
 **Example**:
+
 ```ts
-const { mutate } = hooks.useDelete("/users/:id", { params: {id: 1 }});
+const { mutate } = hooks.useDelete('/users/:id', { params: { id: 1 } });
 ```
+
 ## Zodios key helpers
 
 Zodios provides some helpers to generate query keys to be used to invalidate cache or to get it directly from cache with 'QueryClient.getQueryData(key)'.
@@ -276,12 +316,14 @@ getKeyByPath(method: string, path: string, config?: ZodiosRequestOptions): Query
 **Examples**:
 
 To get a key for a path endpoint with parameters:
+
 ```ts
 const key = zodios.getKeyByPath('get', '/users/:id', { params: { id: 1 } });
 const user = queryClient.getQueryData<User>(key);
 ```
 
 To get a key to invalidate a path endpoint for all possible parameters:
+
 ```ts
 const key = zodios.getKeyByPath('get', '/users/:id');
 queryClient.invalidateQueries(key);
@@ -296,11 +338,14 @@ getKeyByAlias(alias: string, config?: ZodiosRequestOptions): QueryKey;
 **Examples**:
 
 To get a key for an alias endpoint with parameters:
+
 ```ts
 const key = zodios.getKeyByAlias('getUser', { params: { id: 1 } });
 const user = queryClient.getQueryData<User>(key);
 ```
+
 To get a key to invalidate an alias endpoint for all possible parameters:
+
 ```ts
 const key = zodios.getKeyByAlias('getUser');
 queryClient.invalidateQueries(key);
@@ -313,13 +358,14 @@ We recommend using [tsup](https://tsup.egoist.dev/) to bundle your library and d
 Else, you'll get the following error:
 
 ![error](https://user-images.githubusercontent.com/38932402/196659212-5bdb675f-d019-4d8b-8681-5f00ed24db4d.png)
+
 ## Example
 
 ```tsx title="users.tsx"
 import React from "react";
 import { Zodios } from "@zodios/core";
 import { ZodiosHooks } from "@zodios/react";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 const baseUrl = "https://jsonplaceholder.typicode.com";
 const zodios = new Zodios(baseUrl, [...]);
@@ -356,8 +402,8 @@ const Users = () => {
 ```
 
 ```tsx title="root.tsx"
-import { QueryClient, QueryClientProvider } from "react-query";
-import { Users } from "./users";
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Users } from './users';
 
 const queryClient = new QueryClient();
 
